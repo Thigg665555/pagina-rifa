@@ -1,0 +1,120 @@
+<!DOCTYPE html><html lang="pt-BR"><head>
+<title>Ganhadores | Rota Urbana 22</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#000000">
+<link rel="icon" href="images/favicon.png">
+<script src="js/ru22.js"></script>
+<style>
+:root{--bg:#151515;--panel:#303030;--card:#242424;--muted:#aaa;--text:#fff;--green:#198754;--line:#444}
+*{box-sizing:border-box}
+html,body{margin:0;background:#151515;color:var(--text);font-family:Arial,Helvetica,sans-serif}
+a{color:inherit;text-decoration:none}
+.header{height:70px;background:#000;position:sticky;top:0;z-index:20}
+.header-inner{max-width:600px;margin:auto;height:100%;display:flex;align-items:center;justify-content:space-between;padding:0 14px}
+.logo{width:58px;height:58px;object-fit:contain}
+.nav{display:flex;gap:8px;align-items:center}
+.nav a{font-size:13px;padding:9px 10px;border-radius:9px;color:#ddd}
+.nav a:hover,.nav a.active{background:#252525;color:#fff}
+.shell{max-width:600px;margin:0 auto;background:var(--panel);min-height:calc(100vh - 70px);padding:14px 12px 36px}
+.title{font-size:21px;font-weight:800;margin:5px 0 12px}
+.subtitle{font-size:12px;color:var(--muted);margin-top:-5px;margin-bottom:14px}
+.card{background:var(--card);border-radius:12px;padding:12px;margin-bottom:9px;box-shadow:0 2px 8px rgba(0,0,0,.22)}
+.thumb{width:82px;height:82px;border-radius:9px;object-fit:cover;flex:0 0 82px;background:#eee}
+.row{display:flex;gap:12px;align-items:center}
+.name{font-size:17px;font-weight:700;text-transform:uppercase}
+.desc{color:#aaa;font-size:12px;line-height:1.3}
+.badge{display:inline-block;background:#26313b;border-radius:8px;padding:3px 8px;font-size:11px;font-weight:700;margin-top:4px}
+.badge.green{background:var(--green)}
+.btn{display:inline-flex;align-items:center;justify-content:center;border:0;border-radius:10px;padding:11px 14px;background:#198754;color:white;font-weight:700;cursor:pointer}
+.btn.secondary{background:#343a40}
+.input{width:100%;border:1px solid #555;background:#1c1c1c;color:#fff;border-radius:10px;padding:12px 13px;outline:none}
+.input:focus{border-color:#777}
+.grid{display:grid;gap:10px}
+.notice{padding:12px;border-radius:10px;background:#3d2e16;color:#ffd68a;margin-bottom:12px;font-size:13px}
+.error{padding:12px;border-radius:10px;background:#582424;color:#ffd1d1;margin-bottom:12px;font-size:13px}
+.success{padding:12px;border-radius:10px;background:#173e2a;color:#c7f7dc;margin-bottom:12px;font-size:13px}
+.nums{display:flex;gap:5px;flex-wrap:wrap;margin-top:10px}
+.num{font-size:11px;background:#333;border:1px solid #444;border-radius:6px;padding:5px 7px}
+.footer{text-align:center;color:#8b8b8b;font-size:11px;padding:24px 10px 4px}
+@media(max-width:520px){
+  .nav a span{display:none}.nav a{font-size:18px;padding:8px}
+  .shell{padding-left:10px;padding-right:10px}
+  .name{font-size:15px}.thumb{width:74px;height:74px;flex-basis:74px}
+}
+</style>
+
+</head><body>
+<header class="header">
+  <div class="header-inner">
+    <a href="/" aria-label="Início"><img class="logo" src="images/logo.png" alt="Rota Urbana 22"></a>
+    <nav class="nav" aria-label="Navegação">
+      <a href="/" title="Início">⌂ <span>Início</span></a>
+      <a href="/sorteios" title="Sorteios">☷ <span>Sorteios</span></a>
+      <a href="/ganhadores" title="Ganhadores">🏆 <span>Ganhadores</span></a>
+      <a href="/meus-numeros" title="Minhas compras">🛒 <span>Compras</span></a>
+    </nav>
+  </div>
+</header>
+
+<main class="shell">
+  <div class="title">🎉 Ganhadores</div>
+  <div class="subtitle">Histórico de ganhadores e resultados publicados.</div>
+  <div id="dynamic-winners"></div>
+
+  <article class="card">
+    <div class="row">
+      <img class="thumb" src="images/ganhador_6a7cfdfadad5d5.91708085.png" alt="José Roberto Silva">
+      <div>
+        <div class="name">José Roberto Silva</div>
+        <div class="desc">VOLVO FH 540 + BITREM GRANELEIRO OU 900 MIL</div>
+        <div class="desc">Número sorteado: <strong style="color:#ddd">9978520</strong></div>
+      </div>
+    </div>
+  </article>
+
+  <article class="card">
+    <div class="row">
+      <img class="thumb" src="images/no-user-photo.png" alt="Lucas Carvalho">
+      <div>
+        <div class="name">Lucas Carvalho</div>
+        <div class="desc">VOLVO FH 460 + BASCULANTE RANDON OU 800 MIL</div>
+        <div class="desc">Número sorteado: <strong style="color:#ddd">2687154</strong></div>
+        <div class="desc">Sorteio: 08/07/2026 às 20:00</div>
+      </div>
+    </div>
+  </article>
+
+  <article class="card">
+    <div class="row">
+      <img class="thumb" src="images/ganhador_6a425796dea201.58388717.jpeg" alt="Carlos Eduardo">
+      <div>
+        <div class="name">Carlos Eduardo</div>
+        <div class="desc">SCANIA R460 SUPER 4X2 + SIDER FACCHINI OU 900K</div>
+        <div class="desc">Número sorteado: <strong style="color:#ddd">4408888</strong></div>
+        <div class="desc">Sorteio: 27/06/2026 às 20:00</div>
+      </div>
+    </div>
+  </article>
+  <div class="footer">Rota Urbana 22 • © 2026</div>
+</main>
+<script>
+(async function(){
+  try {
+    const r=await fetch('/api/v1/winners',{cache:'no-store'});
+    if(!r.ok) return;
+    const j=await r.json();
+    if(!Array.isArray(j.winners) || !j.winners.length) return;
+    const esc=s=>String(s??'').replace(/[&<>"']/g,m=>({'&':'&','<':'<','>':'>','"':'"',"'":'''}[m]));
+    document.getElementById('dynamic-winners').innerHTML=j.winners.map(w=>`
+      <article class="card"><div class="row">
+        <img class="thumb" src="/assets/img/no-user-photo.png" alt="">
+        <div><div class="name">${esc(w.customer_name||'Ganhador')}</div>
+        <div class="desc">${esc(w.raffle_title||'')}</div>
+        <div class="desc">Número sorteado: <strong style="color:#ddd">${String(w.winning_number??'').padStart(7,'0')}</strong></div>
+        ${w.draw_date?`<div class="desc">Sorteio: ${new Date(w.draw_date).toLocaleString('pt-BR')}</div>`:''}
+        </div></div></article>`).join('');
+  } catch(_) {}
+})();
+</script>
+</body></html>
