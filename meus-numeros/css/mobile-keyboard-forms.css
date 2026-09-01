@@ -1,0 +1,214 @@
+/* Mobile — formulários com teclado aberto (checkout, cadastro, login) */
+@media (max-width: 767.98px) {
+	#newCheckoutModal.modal {
+		overflow: hidden !important;
+	}
+
+	#newCheckoutModal .checkout-modal-pro-dialog.modal-dialog-centered {
+		align-items: flex-start !important;
+		margin: 0 !important;
+		width: 100%;
+		max-width: 100%;
+		min-height: 100dvh;
+		max-height: 100dvh;
+		height: 100dvh;
+	}
+
+	#newCheckoutModal.modal-fullscreen-md-down .modal-dialog,
+	#newCheckoutModal .modal-dialog.checkout-modal-pro-dialog {
+		height: 100dvh;
+		max-height: 100dvh;
+	}
+
+	#newCheckoutModal .modal-content.checkout-modal-pro {
+		border-radius: 0 !important;
+		max-height: 100dvh;
+		height: 100dvh;
+		display: flex;
+		flex-direction: column;
+		overflow: hidden;
+		position: relative;
+		touch-action: pan-y;
+	}
+
+	#newCheckoutModal .checkout-modal-pro__header {
+		flex-shrink: 0;
+	}
+
+	#newCheckoutModal .checkout-modal-pro__body {
+		flex: 1 1 0%;
+		display: flex;
+		flex-direction: column;
+		overflow-x: hidden !important;
+		overflow-y: auto !important;
+		-webkit-overflow-scrolling: touch;
+		overscroll-behavior: contain;
+		touch-action: pan-y;
+		min-height: 0;
+		max-height: none;
+		padding-bottom: max(0.5rem, env(safe-area-inset-bottom));
+		scroll-padding-bottom: calc(var(--rifa-kb-reserve, 88px) + env(safe-area-inset-bottom, 0px));
+	}
+
+	#newCheckoutModal .cko-progress,
+	#newCheckoutModal .cko-stepper {
+		flex-shrink: 0;
+	}
+
+	#newCheckoutModal .checkout-step-panel,
+	#newCheckoutModal #step3.step {
+		flex: none;
+		flex-direction: column;
+		min-height: auto;
+		overflow: visible;
+	}
+
+	#newCheckoutModal .checkout-step-panel[style*="display: none"],
+	#newCheckoutModal #step3[style*="display: none"] {
+		display: none !important;
+	}
+
+	#newCheckoutModal .checkout-form-pro {
+		display: flex;
+		flex-direction: column;
+		flex: none;
+		min-height: auto;
+		overflow: visible;
+	}
+
+	#newCheckoutModal .cko-form-wrap {
+		flex: none;
+		overflow: visible !important;
+		padding-bottom: 0.35rem;
+	}
+
+	#newCheckoutModal #step2 .cko-order-card--compact {
+		margin: 0 1rem 0.5rem;
+	}
+
+	#newCheckoutModal .checkout-field,
+	#newCheckoutModal .checkout-field__input,
+	#newCheckoutModal input.form-control,
+	#newCheckoutModal textarea.form-control,
+	#newCheckoutModal select.form-control {
+		scroll-margin-top: 64px;
+		scroll-margin-bottom: calc(var(--rifa-kb-reserve, 96px) + env(safe-area-inset-bottom, 0px));
+	}
+
+	#newCheckoutModal .cko-footer,
+	#newCheckoutModal #step3-actions.cko-footer {
+		flex-shrink: 0;
+		position: sticky !important;
+		bottom: 0;
+		z-index: 12;
+		background: #fff !important;
+		box-shadow: 0 -4px 16px rgba(15, 23, 42, 0.08);
+		margin-top: 0.35rem;
+		padding: 0.65rem 1rem max(0.65rem, env(safe-area-inset-bottom)) !important;
+	}
+
+	#newCheckoutModal .cko-footer--split {
+		grid-template-columns: 1fr 1fr;
+		gap: 0.5rem;
+	}
+
+	#newCheckoutModal .cko-footer--split #next2 {
+		order: 0;
+	}
+
+	#newCheckoutModal .cko-footer--split #prev1 {
+		order: 0;
+	}
+
+	#newCheckoutModal .cko-footer--split .cko-footer__note {
+		grid-column: 1 / -1;
+		margin: 0.25rem 0 0;
+		font-size: 0.6875rem;
+	}
+
+	#newCheckoutModal .checkout-btn-primary,
+	#newCheckoutModal #next1,
+	#newCheckoutModal #next2,
+	#newCheckoutModal .checkout-btn-secondary,
+	#newCheckoutModal #prev1 {
+		min-height: 2.75rem !important;
+		padding: 0.65rem 1rem !important;
+		font-size: 0.9375rem !important;
+	}
+
+	#cadastroModal2 .modal-dialog-centered,
+	#loginModal2 .modal-dialog-centered {
+		align-items: flex-start !important;
+		margin: 0 !important;
+		width: 100%;
+		max-width: 100%;
+		min-height: 100dvh;
+		max-height: 100dvh;
+	}
+
+	#cadastroModal2 .modal-content,
+	#loginModal2 .modal-content {
+		border-radius: 0;
+		max-height: 100dvh;
+		height: 100dvh;
+		display: flex;
+		flex-direction: column;
+		overflow: hidden;
+	}
+
+	#cadastroModal2 .modal-header,
+	#loginModal2 .modal-header {
+		flex-shrink: 0;
+	}
+
+	#cadastroModal2 .modal-body,
+	#loginModal2 .modal-body {
+		flex: 1 1 0%;
+		overflow-y: auto !important;
+		-webkit-overflow-scrolling: touch;
+		overscroll-behavior: contain;
+		touch-action: pan-y;
+		min-height: 0;
+		padding-bottom: max(1rem, env(safe-area-inset-bottom));
+	}
+
+	#cadastroModal2 input,
+	#cadastroModal2 textarea,
+	#cadastroModal2 select,
+	#loginModal2 input,
+	#loginModal2 textarea,
+	#loginModal2 select {
+		scroll-margin-top: 72px;
+		scroll-margin-bottom: calc(var(--rifa-kb-reserve, 96px) + env(safe-area-inset-bottom, 0px));
+	}
+
+	.container.app-main.app-form {
+		padding-bottom: max(140px, calc(env(safe-area-inset-bottom) + 100px));
+	}
+
+	.container.app-main.app-form input,
+	.container.app-main.app-form textarea,
+	.container.app-main.app-form select {
+		scroll-margin-top: 16px;
+		scroll-margin-bottom: 120px;
+	}
+}
+
+/* Teclado aberto — só esconde o resumo do pedido (evita tela branca no iPhone) */
+body.rifa-keyboard-open #newCheckoutModal.show .cko-order-card,
+body.rifa-keyboard-open #newCheckoutModal.show .cko-order-card--compact {
+	display: none !important;
+}
+
+body.rifa-keyboard-open #newCheckoutModal.show .checkout-modal-pro__header {
+	padding: 0.55rem 0.85rem !important;
+}
+
+body.rifa-keyboard-open #newCheckoutModal.show .checkout-modal-pro__campaign {
+	display: none !important;
+}
+
+body.rifa-keyboard-open #newCheckoutModal.show .cko-footer__note,
+body.rifa-keyboard-open #newCheckoutModal.show .cko-secure-note {
+	display: none !important;
+}

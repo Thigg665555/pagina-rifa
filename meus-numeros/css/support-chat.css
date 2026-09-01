@@ -1,0 +1,354 @@
+/* Suporte online — widget flutuante */
+.rifa-support-fab-wrap {
+	position: fixed;
+	bottom: max(18px, env(safe-area-inset-bottom, 18px));
+	right: max(14px, env(safe-area-inset-right, 14px));
+	z-index: 10049;
+	pointer-events: none;
+}
+.rifa-support-fab-wrap--with-grupo {
+	bottom: calc(max(18px, env(safe-area-inset-bottom, 18px)) + 54px);
+}
+.rifa-support-fab {
+	pointer-events: auto;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 46px;
+	height: 46px;
+	border-radius: 50%;
+	border: none;
+	background: linear-gradient(145deg, #6366f1 0%, #4f46e5 100%);
+	color: #fff;
+	font-size: 1.2rem;
+	cursor: pointer;
+	box-shadow: 0 4px 16px rgba(79, 70, 229, 0.4);
+	transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.rifa-support-fab:hover {
+	transform: translateY(-2px);
+	box-shadow: 0 6px 20px rgba(79, 70, 229, 0.5);
+}
+.rifa-support-fab:active {
+	transform: scale(0.96);
+}
+.rifa-support-fab__pulse {
+	position: absolute;
+	width: 46px;
+	height: 46px;
+	border-radius: 50%;
+	background: rgba(99, 102, 241, 0.35);
+	animation: rifaSupportPulse 2s ease-out infinite;
+	pointer-events: none;
+}
+@keyframes rifaSupportPulse {
+	0% { transform: scale(1); opacity: 0.6; }
+	100% { transform: scale(1.8); opacity: 0; }
+}
+
+.rifa-support-panel {
+	pointer-events: auto;
+	position: fixed;
+	bottom: max(76px, calc(env(safe-area-inset-bottom, 18px) + 58px));
+	right: max(14px, env(safe-area-inset-right, 14px));
+	width: min(380px, calc(100vw - 28px));
+	max-height: min(520px, calc(100vh - 100px));
+	background: #fff;
+	border-radius: 18px;
+	box-shadow: 0 20px 50px rgba(15, 23, 42, 0.18);
+	border: 1px solid #e2e8f0;
+	display: flex;
+	flex-direction: column;
+	overflow: hidden;
+	opacity: 0;
+	visibility: hidden;
+	transform: translateY(12px) scale(0.96);
+	transition: opacity 0.25s ease, transform 0.25s ease, visibility 0.25s;
+	z-index: 10050;
+}
+.rifa-support-panel--with-grupo {
+	bottom: max(130px, calc(env(safe-area-inset-bottom, 18px) + 112px));
+}
+.rifa-support-panel.is-open {
+	opacity: 1;
+	visibility: visible;
+	transform: translateY(0) scale(1);
+}
+
+.rifa-support-header {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	padding: 14px 16px;
+	background: linear-gradient(135deg, #6366f1, #4f46e5);
+	color: #fff;
+}
+.rifa-support-header__avatar {
+	width: 36px;
+	height: 36px;
+	border-radius: 50%;
+	background: rgba(255, 255, 255, 0.2);
+	display: grid;
+	place-items: center;
+	font-size: 1.1rem;
+	flex-shrink: 0;
+}
+.rifa-support-header__title {
+	font-size: 0.95rem;
+	font-weight: 800;
+	line-height: 1.2;
+}
+.rifa-support-header__sub {
+	font-size: 0.72rem;
+	opacity: 0.9;
+}
+.rifa-support-close {
+	margin-left: auto;
+	background: transparent;
+	border: none;
+	color: #fff;
+	font-size: 1.25rem;
+	cursor: pointer;
+	padding: 4px;
+	line-height: 1;
+	opacity: 0.85;
+}
+.rifa-support-close:hover {
+	opacity: 1;
+}
+
+.rifa-support-body {
+	flex: 1;
+	overflow-y: auto;
+	padding: 14px;
+	background: #f8fafc;
+	min-height: 200px;
+}
+.rifa-support-msg {
+	margin-bottom: 12px;
+	max-width: 92%;
+	animation: rifaSupportMsgIn 0.3s ease;
+}
+@keyframes rifaSupportMsgIn {
+	from { opacity: 0; transform: translateY(6px); }
+	to { opacity: 1; transform: translateY(0); }
+}
+.rifa-support-msg--bot .rifa-support-bubble {
+	background: #fff;
+	border: 1px solid #e2e8f0;
+	color: #334155;
+	border-radius: 14px 14px 14px 4px;
+}
+.rifa-support-msg--user {
+	text-align: right;
+	margin-left: auto;
+}
+.rifa-support-msg--user .rifa-support-bubble {
+	background: #4f46e5;
+	color: #fff;
+	border-radius: 14px 14px 4px 14px;
+}
+.rifa-support-bubble {
+	padding: 10px 12px;
+	font-size: 0.85rem;
+	line-height: 1.45;
+	word-break: break-word;
+}
+.rifa-support-bubble strong {
+	font-weight: 700;
+}
+.rifa-support-bubble a {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.rifa-support-quick {
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+	margin-top: 4px;
+}
+.rifa-support-quick__btn {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	width: 100%;
+	padding: 11px 12px;
+	border: 1px solid #e2e8f0;
+	border-radius: 12px;
+	background: #fff;
+	color: #1e293b;
+	font-size: 0.82rem;
+	font-weight: 600;
+	cursor: pointer;
+	text-align: left;
+	transition: background 0.15s, border-color 0.15s;
+}
+.rifa-support-quick__btn:hover {
+	background: #f1f5f9;
+	border-color: #cbd5e1;
+}
+.rifa-support-quick__btn i {
+	font-size: 1.1rem;
+	color: #4f46e5;
+	flex-shrink: 0;
+}
+.rifa-support-quick__btn--refund i {
+	color: #dc2626;
+}
+
+.rifa-support-actions {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 6px;
+	margin-top: 8px;
+}
+.rifa-support-action-btn {
+	display: inline-flex;
+	align-items: center;
+	gap: 5px;
+	padding: 7px 12px;
+	border-radius: 999px;
+	border: none;
+	font-size: 0.75rem;
+	font-weight: 700;
+	cursor: pointer;
+	text-decoration: none;
+}
+.rifa-support-action-btn--primary {
+	background: #4f46e5;
+	color: #fff;
+}
+.rifa-support-action-btn--green {
+	background: #22c55e;
+	color: #fff;
+}
+.rifa-support-action-btn--outline {
+	background: #fff;
+	border: 1px solid #e2e8f0;
+	color: #475569;
+}
+
+.rifa-support-refund-form {
+	background: #fff;
+	border: 1px solid #e2e8f0;
+	border-radius: 12px;
+	padding: 12px;
+	margin-top: 8px;
+}
+.rifa-support-refund-form label {
+	display: block;
+	font-size: 0.72rem;
+	font-weight: 700;
+	color: #64748b;
+	margin-bottom: 4px;
+}
+.rifa-support-refund-form input,
+.rifa-support-refund-form textarea {
+	width: 100%;
+	border: 1px solid #e2e8f0;
+	border-radius: 8px;
+	padding: 8px 10px;
+	font-size: 0.82rem;
+	margin-bottom: 8px;
+	box-sizing: border-box;
+}
+.rifa-support-refund-form textarea {
+	min-height: 72px;
+	resize: vertical;
+}
+.rifa-support-file-btn {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+	padding: 8px 12px;
+	border: 1px dashed #cbd5e1;
+	border-radius: 8px;
+	background: #f8fafc;
+	font-size: 0.78rem;
+	color: #475569;
+	cursor: pointer;
+	margin-bottom: 8px;
+}
+.rifa-support-file-name {
+	font-size: 0.72rem;
+	color: #64748b;
+	margin-bottom: 8px;
+}
+
+.rifa-support-footer {
+	padding: 10px 12px;
+	border-top: 1px solid #e2e8f0;
+	background: #fff;
+}
+.rifa-support-input-row {
+	display: flex;
+	gap: 8px;
+	align-items: flex-end;
+}
+.rifa-support-input {
+	flex: 1;
+	border: 1px solid #e2e8f0;
+	border-radius: 12px;
+	padding: 10px 12px;
+	font-size: 0.85rem;
+	resize: none;
+	min-height: 40px;
+	max-height: 100px;
+	line-height: 1.35;
+	font-family: inherit;
+}
+.rifa-support-input:focus {
+	outline: none;
+	border-color: #6366f1;
+	box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+}
+.rifa-support-send {
+	width: 40px;
+	height: 40px;
+	border: none;
+	border-radius: 12px;
+	background: #4f46e5;
+	color: #fff;
+	cursor: pointer;
+	flex-shrink: 0;
+	font-size: 1rem;
+	display: grid;
+	place-items: center;
+}
+.rifa-support-send:disabled {
+	opacity: 0.5;
+	cursor: not-allowed;
+}
+.rifa-support-typing {
+	display: flex;
+	gap: 4px;
+	padding: 8px 12px;
+}
+.rifa-support-typing span {
+	width: 6px;
+	height: 6px;
+	border-radius: 50%;
+	background: #94a3b8;
+	animation: rifaSupportDot 1.2s infinite;
+}
+.rifa-support-typing span:nth-child(2) { animation-delay: 0.15s; }
+.rifa-support-typing span:nth-child(3) { animation-delay: 0.3s; }
+@keyframes rifaSupportDot {
+	0%, 80%, 100% { opacity: 0.3; transform: scale(0.8); }
+	40% { opacity: 1; transform: scale(1); }
+}
+
+@media (max-width: 480px) {
+	.rifa-support-panel {
+		bottom: 0;
+		right: 0;
+		left: 0;
+		width: 100%;
+		max-height: 85vh;
+		border-radius: 18px 18px 0 0;
+	}
+	.rifa-support-panel--with-grupo {
+		bottom: 0;
+	}
+}
