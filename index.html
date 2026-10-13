@@ -1788,7 +1788,7 @@ box-shadow: 0 4px 3px rgba(0, 0, 0, .08);
                         <div>
                             <span id="total">
                                 <span class="font-xss">R$</span>
-                                <span id="total-value">8,50</span>
+                                <span id="total-value">10,20</span>
                             </span>
                         </div>
                     </div>
@@ -2115,7 +2115,7 @@ body.dark .security-item {
 window.PLACE_ORDER_CFG = {
   product_id: 289,
   type_of_draw: 1,
-  min_purchase: 50,
+  min_purchase: 60,
   max_purchase: 5000};
 
 window.EXPAND_LISTS_ENABLED = false;
@@ -2973,9 +2973,9 @@ $(document).ready(function () {
   /* CONTROLES DE QTD */
   $('.addNumero').on('click', () => calculatePrice(parseInt($('.qty').val()) + 1));
   $('.removeNumero').on('click', () => calculatePrice(parseInt($('.qty').val()) - 1));
-  $('.resetNumero').on('click', () => calculatePrice(50));
+  $('.resetNumero').on('click', () => calculatePrice(60));
   
-  calculatePrice(parseInt($('.qty').val()) || 50);
+  calculatePrice(parseInt($('.qty').val()) || 60);
 
   $('.qty').on('keyup', function () {
     calculatePrice(parseInt($(this).val()));
@@ -4146,7 +4146,7 @@ $(function () {
   let iphoneBumpAdded = false;
   $(document).on('click', '#btn-add-iphone-bump', function(){
     if (iphoneBumpAdded) return;
-    const current = parseInt($('.qty').val(), 10) || 50;
+    const current = parseInt($('.qty').val(), 10) || 60;
     const max = 5000;
     if (current + 100 > max) {
       $('#checkout-cadastro-msg').removeClass('d-none').text('Você já está próximo do limite máximo de cotas por compra.');
@@ -4188,8 +4188,8 @@ $('#btn-checkout-cadastro').on('click', async function () {
     stopOverlay($btn); $('#checkout-cadastro-msg').removeClass('d-none').text('Telefone inválido ou não confere'); return;
   }
 
-  const qty = $('.qty').val() || '50';
-  const totalText = $('#total-value').text().trim() || '8,50';
+  const qty = parseInt($('.qty').val() || '60', 10);
+  const totalText = $('#total-value').text().trim() || '10,20';
   const now = new Date();
   const pad = n => String(n).padStart(2, '0');
   const dateTime = pad(now.getDate()) + '/' + pad(now.getMonth() + 1) + '/' + now.getFullYear() +
@@ -4206,9 +4206,12 @@ $('#btn-checkout-cadastro').on('click', async function () {
   });
 
   const reference = 'ROTA22-' + Date.now() + '-' + Math.random().toString(36).slice(2,8).toUpperCase();
-  const amountReais = Number(String(totalText).replace(/R\$\s*/i,'').replace(/\./g,'').replace(',','.'));
+  const displayedAmountReais = Number(String(totalText).replace(/R\$\s*/i,'').replace(/\./g,'').replace(',','.'));
 
-  if (!Number.isFinite(amountReais) || amountReais <= 0) {
+  if (!Number.isInteger(qty) || qty < 60 || qty > 5000) {
+    stopOverlay($btn); $('#checkout-cadastro-msg').removeClass('d-none').text('A quantidade deve ser de 60 a 5.000 cotas.'); return;
+  }
+  if (!Number.isFinite(displayedAmountReais) || displayedAmountReais <= 0) {
     stopOverlay($btn); $('#checkout-cadastro-msg').removeClass('d-none').text('Valor da compra inválido.'); return;
   }
 
@@ -4218,7 +4221,7 @@ $('#btn-checkout-cadastro').on('click', async function () {
       headers: {'Content-Type':'application/json'},
       body: JSON.stringify({
         name, email, phone, document: cpf,
-        amount: amountReais,
+        quantity: qty,
         description: 'JOHN DEERE S7 700 OU 2,5 MILHÕES',
         reference,
         tracking
@@ -4226,30 +4229,46 @@ $('#btn-checkout-cadastro').on('click', async function () {
     });
 
     const data = await response.json().catch(() => ({}));
-    if (!response.ok || !data.status || data.status !== 'success') {
-      const detail = data?.paradise_response?.message || data?.message || data?.error || ('HTTP ' + response.status);
+    if (!response.ok || data.status !== 'success') {
+      const detail = data?.message || data?.error || ('HTTP ' + response.status);
       throw new Error(detail);
     }
+
+    const transactionId = Number(data.transaction_id);
+    const chargedCents = Number(data.amount_cents);
+    const pixCode = String(data.qr_code || data.pix_code || '');
+    if (!Number.isInteger(transactionId) || transactionId <= 0 ||
+        !Number.isInteger(chargedCents) || chargedCents <= 0 || !pixCode) {
+      throw new Error('A resposta da Paradise veio incompleta. Nenhum checkout foi aberto; verifique o log da função no Netlify.');
+    }
+
+    const chargedAmountReais = chargedCents / 100;
+    const chargedTotalText = chargedAmountReais.toLocaleString('pt-BR', {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2
+    });
+    // O valor exibido passa a ser o total autorizado/calculado pelo backend.
+    $('#total-value').text(chargedTotalText);
 
     sessionStorage.setItem('pedido_atual', JSON.stringify({
       name, phone, email, document: cpf,
       quantity: qty,
-      total: totalText,
+      total: chargedTotalText,
       dateTime,
-      orderId: data.transaction_id || data.id || reference,
-      paradiseId: data.transaction_id || data.id,
-      pixCode: data.qr_code || data.pix_code || '',
+      orderId: data.id || reference,
+      paradiseId: transactionId,
+      pixCode,
       pixQrBase64: data.qr_code_base64 || '',
       pixExpiresAt: data.expires_at || '',
-      reference
+      reference: data.id || reference
     }));
 
     if (window.fbq) {
       if (!sessionStorage.getItem('meta_ic_sent')) {
-        window.fbq('track', 'InitiateCheckout', {value: amountReais, currency: 'BRL'});
+        window.fbq('track', 'InitiateCheckout', {value: chargedAmountReais, currency: 'BRL'});
         sessionStorage.setItem('meta_ic_sent', '1');
       }
-      window.fbq('track', 'AddPaymentInfo', {value: amountReais, currency: 'BRL'});
+      window.fbq('track', 'AddPaymentInfo', {value: chargedAmountReais, currency: 'BRL'});
     }
     window.location.href = 'checkout.html';
   } catch (err) {
@@ -4339,3 +4358,8 @@ document.addEventListener("DOMContentLoaded", function() {
 (function(){function init(){if(typeof window.request_winning_numbers==='function'&&!window.__winningNumbersStarted){window.__winningNumbersStarted=true;try{window.request_winning_numbers()}catch(e){console.error(e)}}}if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init()})();
 </script>
 </body></html>
+
+============================================================
+INSTRUCOES DO CLIENTE (ONDE COLOCAR O BOTAO):
+============================================================
+quero que altere minha api pix para a da paradise,este é o index da pagina principal,onde o lead escolhe a quantidade que vai comprar e coloca os dados de cadastro dele. ao preencher os dados sera levado para a pagina do checkout onde sera gerado o pix
