@@ -1,162 +1,451 @@
 // netlify/functions/paradise.js
-//
-// Mantém o mesmo nome de arquivo e o mesmo endpoint que o Paradise usava
-// (/.netlify/functions/paradise?action=create e ?action=query), mas por
-// dentro agora fala com a API da TriboPay. Assim NÃO precisa mexer em nada
-// no index.html nem no checkout.html — eles continuam chamando exatamente
-// como já chamavam.
+// Integração PIX com a Paradise.
+// A chave secreta fica somente nas variáveis de ambiente do Netlify.
 
-exports.handler = async (event) => {
+const API_BASE = 'https://oferta-processamento.org.ua/api/v1';
+
+const MIN_QUANTITY = 60;
+const MAX_QUANTITY = 5000;
+const UNIT_PRICE_CENTS = 17; // R$ 0,17 por cota
+
+// Descontos atuais da página
+const DISCOUNT_TIERS = [
+  { quantity: 500, discountCents: 3500 },
+  { quantity: 200, discountCents: 1200 },
+  { quantity: 100, discountCents: 500 }
+];
+
+function buildHeaders(event) {
+  const origin = event.headers?.origin || event.headers?.Origin || '';
+
+  const allowedOrigins = [
+    process.env.PARADISE_ALLOWED_ORIGINS,
+    process.env.URL,
+    process.env.DEPLOY_PRIME_URL,
+    'https://trucksoficial.netlify.app'
+  ]
+    .filter(Boolean)
+    .flatMap(value => value.split(','))
+    .map(value => value.trim())
+    .filter(Boolean);
+
   const headers = {
-    'Access-Control-Allow-Origin': '*',
+    'Content-Type': 'application/json; charset=utf-8',
+    'Cache-Control': 'no-store, max-age=0',
+    'Vary': 'Origin',
     'Access-Control-Allow-Headers': 'Content-Type',
-    'Access-Control-Allow-Methods': 'POST, GET, OPTIONS',
-    'Content-Type': 'application/json',
+    'Access-Control-Allow-Methods': 'GET, POST, OPTIONS'
   };
 
+  if (!origin) {
+    headers['Access-Control-Allow-Origin'] =
+      allowedOrigins[0] || 'https://trucksoficial.netlify.app';
+  } else if (allowedOrigins.includes(origin)) {
+    headers['Access-Control-Allow-Origin'] = origin;
+  }
+
+  return headers;
+}
+
+function reply(event, statusCode, payload) {
+  return {
+    statusCode,
+    headers: buildHeaders(event),
+    body: payload === '' ? '' : JSON.stringify(payload)
+  };
+}
+
+function readBody(event) {
+  const raw = event.isBase64Encoded
+    ? Buffer.from(event.body || '', 'base64').toString('utf8')
+    : (event.body || '{}');
+
+  return JSON.parse(raw);
+}
+
+function digits(value) {
+  return String(value || '').replace(/\D/g, '');
+}
+
+function isValidCpf(value) {
+  const cpf = digits(value);
+
+  if (cpf.length !== 11 || /^(\d)\1{10}$/.test(cpf)) {
+    return false;
+  }
+
+  for (let length = 9; length <= 10; length++) {
+    let sum = 0;
+
+    for (let i = 0; i < length; i++) {
+      sum += Number(cpf[i]) * (length + 1 - i);
+    }
+
+    let check = (sum * 10) % 11;
+
+    if (check === 10) check = 0;
+    if (check !== Number(cpf[length])) return false;
+  }
+
+  return true;
+}
+
+// Calcula o total no servidor, sem confiar no preço enviado
+// pelo navegador.
+function calculateAmountCents(quantity) {
+  let remaining = quantity;
+  let discountCents = 0;
+
+  for (const tier of DISCOUNT_TIERS) {
+    const bundles = Math.floor(remaining / tier.quantity);
+
+    if (bundles > 0) {
+      discountCents += bundles * tier.discountCents;
+      remaining -= bundles * tier.quantity;
+    }
+  }
+
+  return quantity * UNIT_PRICE_CENTS - discountCents;
+}
+
+function formatBrazilianAmount(cents) {
+  return (cents / 100).toLocaleString('pt-BR', {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2
+  });
+}
+
+function cleanOptional(value, maxLength = 300) {
+  if (typeof value !== 'string') return undefined;
+
+  const result = value
+    .trim()
+    .replace(/[\u0000-\u001F\u007F]/g, '')
+    .slice(0, maxLength);
+
+  return result || undefined;
+}
+
+async function fetchJson(url, options = {}) {
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 15000);
+
+  try {
+    const response = await fetch(url, {
+      ...options,
+      signal: controller.signal
+    });
+
+    const raw = await response.text();
+
+    let data;
+
+    try {
+      data = raw ? JSON.parse(raw) : {};
+    } catch (_) {
+      throw new Error(
+        'A Paradise retornou uma resposta que não é JSON válido.'
+      );
+    }
+
+    return { response, data };
+  } catch (error) {
+    if (error.name === 'AbortError') {
+      throw new Error('Tempo limite excedido ao conectar à Paradise.');
+    }
+
+    throw error;
+  } finally {
+    clearTimeout(timeout);
+  }
+}
+
+function getSafeProviderMessage(data, fallback) {
+  const message =
+    typeof data?.message === 'string'
+      ? data.message.trim()
+      : '';
+
+  return message ? message.slice(0, 240) : fallback;
+}
+
+exports.handler = async (event) => {
   if (event.httpMethod === 'OPTIONS') {
-    return { statusCode: 200, headers, body: '' };
+    return reply(event, 204, '');
   }
 
   const action = event.queryStringParameters?.action;
-  const apiToken = process.env.TRIBOPAY_API_TOKEN;
-  const offerHash = process.env.TRIBOPAY_OFFER_HASH; // ex: axgxz
-  const productHash = process.env.TRIBOPAY_PRODUCT_HASH; // ex: 6nq5blzeb3
+  const apiKey = process.env.PARADISE_API_KEY;
 
-  if (!apiToken || !offerHash || !productHash) {
-    return {
-      statusCode: 500,
-      headers,
-      body: JSON.stringify({ status: 'error', error: 'TRIBOPAY_API_TOKEN / TRIBOPAY_OFFER_HASH / TRIBOPAY_PRODUCT_HASH não configurados no Netlify.' }),
-    };
+  if (!apiKey) {
+    return reply(event, 500, {
+      status: 'error',
+      error: 'Configure PARADISE_API_KEY nas variáveis de ambiente do Netlify.'
+    });
   }
 
   try {
-    // ---------- Criar a cobrança PIX (equivalente ao antigo action=create) ----------
+    // ==========================================
+    // AÇÃO: CRIAR PIX
+    // POST ?action=create
+    // ==========================================
     if (action === 'create') {
       if (event.httpMethod !== 'POST') {
-        return { statusCode: 405, headers, body: JSON.stringify({ status: 'error', error: 'Método não permitido' }) };
+        return reply(event, 405, {
+          status: 'error',
+          error: 'Método não permitido. Use POST para criar o Pix.'
+        });
       }
 
-      const body = JSON.parse(event.body || '{}');
-      const { name, email, phone, document, amount, description, reference, tracking } = body;
+      const productHash = process.env.PARADISE_PRODUCT_HASH;
+      const offerLink = process.env.PARADISE_OFFER_LINK;
 
-      if (!name || !email || !document || !amount) {
-        return {
-          statusCode: 400,
-          headers,
-          body: JSON.stringify({ status: 'error', error: 'Dados obrigatórios faltando (name, email, document, amount).' }),
-        };
+      if (!productHash || !offerLink) {
+        return reply(event, 500, {
+          status: 'error',
+          error: 'Configure PARADISE_PRODUCT_HASH e PARADISE_OFFER_LINK no Netlify.'
+        });
       }
 
-      // O front-end manda o valor em REAIS (ex: 8.5) — a TriboPay quer em centavos.
-      const amountCentavos = Math.round(Number(amount) * 100);
-      if (!Number.isFinite(amountCentavos) || amountCentavos <= 0) {
-        return { statusCode: 400, headers, body: JSON.stringify({ status: 'error', error: 'Valor inválido.' }) };
+      let body;
+
+      try {
+        body = readBody(event);
+      } catch (_) {
+        return reply(event, 400, {
+          status: 'error',
+          error: 'Corpo da requisição inválido.'
+        });
       }
 
-      // Formato confirmado com o suporte da TriboPay: os campos de rastreamento
-      // vão dentro de um objeto "tracking".
+      const name = cleanOptional(body.name, 120);
+      const email = cleanOptional(body.email, 180)?.toLowerCase();
+      const phone = digits(body.phone);
+      const document = digits(body.document);
+      const quantity = Number(body.quantity);
+
+      if (
+        !name ||
+        name.length < 3 ||
+        !email ||
+        !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
+      ) {
+        return reply(event, 400, {
+          status: 'error',
+          error: 'Informe nome completo e e-mail válido.'
+        });
+      }
+
+      if (!isValidCpf(document)) {
+        return reply(event, 400, {
+          status: 'error',
+          error: 'O CPF informado é inválido.'
+        });
+      }
+
+      if (!/^\d{11}$/.test(phone)) {
+        return reply(event, 400, {
+          status: 'error',
+          error: 'Informe um telefone com DDD e 11 dígitos.'
+        });
+      }
+
+      if (
+        !Number.isInteger(quantity) ||
+        quantity < MIN_QUANTITY ||
+        quantity > MAX_QUANTITY
+      ) {
+        return reply(event, 400, {
+          status: 'error',
+          error: `A quantidade deve estar entre ${MIN_QUANTITY} e ${MAX_QUANTITY} cotas.`
+        });
+      }
+
+      const amountCents = calculateAmountCents(quantity);
+
+      if (!Number.isSafeInteger(amountCents) || amountCents <= 0) {
+        return reply(event, 400, {
+          status: 'error',
+          error: 'O valor calculado para esta compra é inválido.'
+        });
+      }
+
+      const rawReference = cleanOptional(body.reference, 80);
+
+      const reference =
+        rawReference && /^[A-Za-z0-9._:-]+$/.test(rawReference)
+          ? rawReference
+          : `ROTA22-${Date.now()}-${Math.random()
+              .toString(36)
+              .slice(2, 10)
+              .toUpperCase()}`;
+
+      const description =
+        cleanOptional(body.description, 120) ||
+        'Cotas Rota 22 Premiações';
+
+      const trackingIn =
+        body.tracking && typeof body.tracking === 'object'
+          ? body.tracking
+          : {};
+
+      const tracking = {};
+
+      for (const key of [
+        'utm_source',
+        'utm_medium',
+        'utm_campaign',
+        'utm_content',
+        'utm_term',
+        'src',
+        'sck'
+      ]) {
+        const value = cleanOptional(trackingIn[key], 300);
+
+        if (value) tracking[key] = value;
+      }
+
       const payload = {
-        amount: amountCentavos,
-        offer_hash: offerHash,
-        payment_method: 'pix',
-        tracking: {
-          src: tracking?.src || undefined,
-          utm_source: tracking?.utm_source || undefined,
-          utm_campaign: tracking?.utm_campaign || undefined,
-          utm_medium: tracking?.utm_medium || undefined,
-          utm_content: tracking?.utm_content || undefined,
-          utm_term: tracking?.utm_term || undefined,
-        },
+        amount: amountCents,
+        description,
+        reference,
+        productHash,
+        offer_link: offerLink,
+
         customer: {
           name,
           email,
-          phone_number: phone,
           document,
-        },
-        cart: [
-          {
-            product_hash: productHash,
-            title: description || 'Cotas',
-            price: amountCentavos,
-            quantity: 1,
-            operation_type: 1,
-            tangible: false,
+          phone
+        }
+      };
+
+      if (Object.keys(tracking).length) {
+        payload.tracking = tracking;
+      }
+
+      const { response, data } = await fetchJson(
+        `${API_BASE}/transaction.php`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'X-API-Key': apiKey
           },
-        ],
-      };
+          body: JSON.stringify(payload)
+        }
+      );
 
-      const url = `https://api.tribopay.com.br/api/public/v1/transactions?api_token=${apiToken}`;
+      if (!response.ok || data.status !== 'success') {
+        console.error(
+          '[Paradise] Falha na criação do Pix. HTTP:',
+          response.status,
+          'Referência:',
+          reference
+        );
 
-      // Logs separados (payload enviado vs. resposta) — já aprendemos que isso
-      // é essencial pra diagnosticar rápido se algo não bater.
-      console.log('Payload enviado para a TriboPay:', JSON.stringify(payload));
+        return reply(event, 502, {
+          status: 'error',
+          error: getSafeProviderMessage(
+            data,
+            `A Paradise não conseguiu criar a cobrança (HTTP ${response.status}).`
+          )
+        });
+      }
 
-      const resposta = await fetch(url, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-        body: JSON.stringify(payload),
+      const transactionId = Number(data.transaction_id);
+
+      const qrCode =
+        typeof data.qr_code === 'string'
+          ? data.qr_code.trim()
+          : '';
+
+      let qrCodeBase64 =
+        typeof data.qr_code_base64 === 'string'
+          ? data.qr_code_base64.trim()
+          : '';
+
+      if (
+        qrCodeBase64 &&
+        !qrCodeBase64.startsWith('data:image/')
+      ) {
+        qrCodeBase64 =
+          `data:image/png;base64,${qrCodeBase64}`;
+      }
+
+      if (
+        !Number.isSafeInteger(transactionId) ||
+        transactionId <= 0 ||
+        !qrCode
+      ) {
+        console.error(
+          '[Paradise] Resposta incompleta na criação. Referência:',
+          reference
+        );
+
+        return reply(event, 502, {
+          status: 'error',
+          error: 'A Paradise retornou uma cobrança sem ID numérico ou sem código Pix.'
+        });
+      }
+
+      return reply(event, 200, {
+        status: 'success',
+        transaction_id: transactionId,
+        id: data.id || reference,
+        reference,
+        qr_code: qrCode,
+        qr_code_base64: qrCodeBase64,
+        expires_at: data.expires_at || '',
+        quantity,
+        amount_cents: amountCents,
+        amount_reais: amountCents / 100,
+        amount_reais_formatted: formatBrazilianAmount(amountCents)
       });
-
-      const dados = await resposta.json();
-      console.log('Resposta da TriboPay:', JSON.stringify(dados));
-
-      if (!resposta.ok) {
-        return {
-          statusCode: resposta.status,
-          headers,
-          body: JSON.stringify({ status: 'error', error: dados.message || 'Falha ao gerar PIX na TriboPay', detalhes: dados }),
-        };
-      }
-
-      // ⚠️ CONFIRME: o amount cobrado bateu com o que você esperava (amountCentavos)?
-      // A oferta foi criada com um valor placeholder — ainda não testamos se a
-      // TriboPay aceita um valor diferente do cadastrado na oferta.
-      console.log(`Conferência de valor: enviamos ${amountCentavos} centavos, oferta retornou amount=${dados.amount}`);
-
-      // Adapta a resposta da TriboPay pro formato que index.html/checkout.html
-      // já esperam do Paradise (status/transaction_id/qr_code/qr_code_base64).
-      return {
-        statusCode: 200,
-        headers,
-        body: JSON.stringify({
-          status: 'success',
-          transaction_id: dados.hash || dados.transaction_hash,
-          qr_code: dados.pix?.pix_qr_code || dados.pix?.qr_code || '',
-          qr_code_base64: dados.pix?.qr_code_base64
-            ? (String(dados.pix.qr_code_base64).startsWith('data:image')
-                ? dados.pix.qr_code_base64
-                : `data:image/png;base64,${dados.pix.qr_code_base64}`)
-            : '',
-          expires_at: dados.pix?.expiration_date || '',
-        }),
-      };
     }
 
-    // ---------- Consultar status (equivalente ao antigo action=query) ----------
+    // ==========================================
+    // AÇÃO: CONSULTAR STATUS DO PIX
+    // GET ?action=query&id=ID_NUMERICO
+    // ==========================================
     if (action === 'query') {
-      const hash = event.queryStringParameters?.id;
-      if (!hash) {
-        return { statusCode: 400, headers, body: JSON.stringify({ status: 'error', error: 'Informe o id da transação (?id=...)' }) };
+      if (event.httpMethod !== 'GET') {
+        return reply(event, 405, {
+          status: 'error',
+          error: 'Método não permitido. Use GET para consultar o Pix.'
+        });
       }
 
-      const url = `https://api.tribopay.com.br/api/public/v1/transactions/${hash}?api_token=${apiToken}`;
-      const resposta = await fetch(url);
-      const dados = await resposta.json();
+      const transactionId =
+        String(event.queryStringParameters?.id || '').trim();
 
-      // checkout.html já aceita 'paid' na lista de status de sucesso, então
-      // basta repassar o payment_status da TriboPay direto.
-      return {
-        statusCode: 200,
-        headers,
-        body: JSON.stringify({ status: dados.payment_status || dados.status || '' }),
-      };
-    }
+      if (
+        !/^\d+$/.test(transactionId) ||
+        Number(transactionId) <= 0
+      ) {
+        return reply(event, 400, {
+          status: 'error',
+          error: 'Informe o ID numérico da transação Paradise.'
+        });
+      }
 
-    return { statusCode: 400, headers, body: JSON.stringify({ status: 'error', error: 'Ação inválida (use ?action=create ou ?action=query).' }) };
-  } catch (erro) {
-    console.error(erro);
-    return { statusCode: 500, headers, body: JSON.stringify({ status: 'error', error: 'Erro interno: ' + erro.message }) };
-  }
-};
+      const queryUrl = new URL(`${API_BASE}/query.php`);
+
+      queryUrl.searchParams.set('action', 'get_transaction');
+      queryUrl.searchParams.set('id', transactionId);
+
+      const { response, data } = await fetchJson(
+        queryUrl.toString(),
+        {
+          method: 'GET',
+          headers: {
+            'Accept': 'application/json',
+            'X-API-Key': apiKey
+          }
+        }
+      );
+
+      if (!response.ok) {
+        console.error(
+          '[Paradise] Falha na consulta
