@@ -356,8 +356,14 @@ try { window.meta_checkout_page_ic = true; } catch(e) {}
     }
   }
 
-  var totalSeconds = 14 * 60 + 50;
-  var secondsLeft = totalSeconds;
+  // Usa a expiração real retornada pela Paradise; mantém 14:50 como fallback.
+  var fallbackSeconds = 14 * 60 + 50;
+  var expiresAtText = String(pedido.pixExpiresAt || '').trim();
+  var expiresAtMs = expiresAtText ? Date.parse(expiresAtText.replace(' ', 'T')) : NaN;
+  var secondsLeft = Number.isFinite(expiresAtMs)
+    ? Math.max(0, Math.ceil((expiresAtMs - Date.now()) / 1000))
+    : fallbackSeconds;
+  var totalSeconds = Math.max(secondsLeft, 1);
   function renderTimer() {
     var m = Math.floor(secondsLeft / 60), s = secondsLeft % 60;
     document.getElementById('pix-timer').textContent = String(m).padStart(2,'0') + ':' + String(s).padStart(2,'0');
@@ -386,8 +392,17 @@ try { window.meta_checkout_page_ic = true; } catch(e) {}
         setTimeout(function () {
           window.location.href = 'https://trucksoficial.netlify.app/meus-numeros';
         }, 2500);
-      } else if (status === 'failed' || status === 'refunded' || status === 'chargeback') {
-        setStatus(status === 'failed' ? 'Pagamento não aprovado' : 'Pagamento atualizado');
+      } else if (['failed','refunded','chargeback','expired','canceled','cancelled'].includes(status)) {
+        clearInterval(pollInterval);
+        var terminalMessages = {
+          failed: 'Pagamento não aprovado',
+          refunded: 'Pagamento estornado',
+          chargeback: 'Pagamento contestado',
+          expired: 'Pix expirado',
+          canceled: 'Pix cancelado',
+          cancelled: 'Pix cancelado'
+        };
+        setStatus(terminalMessages[status] || 'Pagamento atualizado', false);
       }
     } catch (_) {}
   }
