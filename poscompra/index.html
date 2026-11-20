@@ -7,7 +7,7 @@
   <!-- Facebook verificador de dominio -->
     
   <!-- Cabeçalho -->
-<title>Rota 22 Premiações</title>
+<title>Participação registrada - Rota 22 Premiações</title>
 <meta name="description" content="Participe e concorra a prêmios incríveis!">
 <meta property="og:title" content="Rota 22 Premiações">
 <meta property="og:description" content="Participe e concorra a prêmios incríveis!">
@@ -21,10 +21,10 @@
   <!-- Css/JS -->
    <link rel="stylesheet" href="css/leowp.css">
    <link rel="stylesheet" href="css/all.min.css">
-   <script async="" src="js/fbevents.js"></script><script async="" src="js/gtm.js"></script><script src="js/jquery.min.js"></script> 
+   <script async="" src="js/fbevents.js"></script><script async="" src="js/gtm.js"></script><script async="" src="js/fbevents.js"></script><script async="" src="js/gtm.js"></script><script src="js/jquery.min.js"></script> 
 
   <script>
-     var _base_url_ = 'https://br251oficial.com/';
+     var _base_url_ = 'https://trucksoficial.netlify.app/';
   </script>
   
   
@@ -540,224 +540,578 @@ box-shadow: 0 4px 3px rgba(0, 0, 0, .08);
 
   <!-- PRÉVIA DA TELA PÓS-COMPRA: amostra visual, não confirma pagamento -->
   <style id="post-payment-preview-styles">
-    #post-payment-preview { max-width: 600px; margin: 0 auto 28px; }
+
+    /* Painel de números: lista completa, compacta e pesquisável. */
     #post-payment-preview .preview-disclaimer {
-      display:flex; align-items:flex-start; gap:10px;
-      padding:13px 14px; margin:0 0 14px;
-      border:1px solid #8b6424; border-radius:12px;
-      background:#2b2418; color:#ffe2a6; font-size:12px; line-height:1.45;
+      align-items:center;
+      padding:15px 16px;
+      border:1px solid #287a50;
+      border-radius:15px;
+      background:linear-gradient(135deg,#123724 0%,#1b4b32 100%);
+      color:#effff4;
+      box-shadow:0 8px 22px rgba(0,0,0,.18);
     }
-    #post-payment-preview .preview-disclaimer i { font-size:19px; margin-top:1px; }
-    #post-payment-preview .postpay-hero {
-      display:flex; align-items:center; gap:12px;
-      padding:17px 15px; margin-bottom:14px;
-      border:1px solid #24523b; border-radius:15px;
-      background:linear-gradient(135deg,#10291e 0%,#173d2b 100%);
+    #post-payment-preview .preview-disclaimer i {
+      flex:0 0 auto;
+      color:#86efac;
+      font-size:25px;
+    }
+    #post-payment-preview .preview-disclaimer strong {
+      display:inline-block;
+      margin-bottom:3px;
+      font-size:15px;
+      line-height:1.3;
+    }
+    #post-payment-preview .preview-disclaimer small {
+      display:block;
+      margin-top:4px;
+      color:#c4dfce;
+      font-size:10px;
+      line-height:1.4;
+    }
+    #post-payment-preview .postpay-numbers-card {
+      padding:15px;
+      overflow:hidden;
+      border:1px solid #285d40;
+      border-radius:16px;
+      background:linear-gradient(155deg,#1b241e 0%,#171a18 58%,#102319 100%);
+      box-shadow:0 8px 22px rgba(0,0,0,.2);
+    }
+    #post-payment-preview .postpay-number-header {
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      margin-bottom:6px;
+    }
+    #post-payment-preview .postpay-number-header h2 {
+      margin:0;
       color:#fff;
+      font-size:17px;
+      font-weight:800;
+      line-height:1.25;
     }
-    #post-payment-preview .postpay-icon {
-      width:46px; height:46px; flex:0 0 46px;
-      display:flex; align-items:center; justify-content:center;
-      border-radius:50%; background:#1c8a50; color:#fff; font-size:24px;
+    #post-payment-preview .postpay-demo-tag {
+      flex:0 0 auto;
+      padding:5px 8px;
+      border:1px solid #6c582e;
+      border-radius:999px;
+      background:#2c281d;
+      color:#f5d994;
+      font-size:9px;
+      font-weight:800;
+      letter-spacing:.04em;
     }
-    #post-payment-preview .postpay-title {
-      font-size:17px; line-height:1.25; font-weight:800; margin:0 0 4px;
+    #post-payment-preview .postpay-number-intro {
+      margin:0 0 12px;
+      color:#bfc9c2;
+      font-size:11px;
+      line-height:1.5;
     }
-    #post-payment-preview .postpay-subtitle { margin:0; color:#d5e9dc; font-size:12px; line-height:1.45; }
-    #post-payment-preview .postpay-card {
-      padding:15px; margin-bottom:14px;
-      border:1px solid #303030; border-radius:15px;
-      background:#191919; color:#fff; box-shadow:0 5px 16px rgba(0,0,0,.12);
+    #post-payment-preview .postpay-summary-grid {
+      display:grid;
+      grid-template-columns:repeat(3,minmax(0,1fr));
+      gap:7px;
+      margin:0 0 12px;
     }
-    #post-payment-preview .postpay-card-heading {
-      display:flex; align-items:center; justify-content:space-between; gap:8px;
-      margin-bottom:7px; font-size:15px; font-weight:800;
+    #post-payment-preview .postpay-summary-item {
+      min-width:0;
+      padding:9px 7px;
+      border:1px solid rgba(115,173,135,.22);
+      border-radius:10px;
+      background:rgba(255,255,255,.045);
+      text-align:center;
     }
-    #post-payment-preview .postpay-pill {
-      display:inline-flex; align-items:center; gap:5px;
-      padding:5px 8px; border-radius:999px;
-      background:#2c2a21; border:1px solid #69572e;
-      color:#f6d58a; font-size:10px; font-weight:800; white-space:nowrap;
+    #post-payment-preview .postpay-summary-label {
+      display:block;
+      margin-bottom:4px;
+      color:#9eada3;
+      font-size:8px;
+      font-weight:700;
+      line-height:1.3;
+      letter-spacing:.045em;
+      text-transform:uppercase;
     }
-    #post-payment-preview .postpay-description {
-      margin:0 0 13px; color:#bdbdbd; font-size:12px; line-height:1.45;
+    #post-payment-preview .postpay-summary-value {
+      display:block;
+      color:#f3fff6;
+      font-size:15px;
+      font-weight:800;
+      line-height:1.2;
+      font-variant-numeric:tabular-nums;
     }
-    #post-payment-preview .postpay-stats {
-      display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:9px; margin-bottom:14px;
+    #post-payment-preview .postpay-summary-sub {
+      display:block;
+      margin-top:3px;
+      color:#9da99f;
+      font-size:8px;
+      line-height:1.25;
     }
-    #post-payment-preview .postpay-stat {
-      padding:11px 12px; border-radius:10px;
-      border:1px solid #303030; background:#212121; min-width:0;
+    #post-payment-preview .postpay-number-tools {
+      display:grid;
+      grid-template-columns:minmax(0,1fr) auto;
+      gap:7px;
+      margin:0 0 9px;
     }
-    #post-payment-preview .postpay-stat-label {
-      color:#a9a9a9; font-size:10px; text-transform:uppercase; letter-spacing:.04em; margin-bottom:5px;
+    #post-payment-preview .postpay-search-wrap {
+      position:relative;
+      min-width:0;
     }
-    #post-payment-preview .postpay-stat-value { color:#fff; font-size:16px; font-weight:800; overflow-wrap:anywhere; }
+    #post-payment-preview .postpay-search-wrap i {
+      position:absolute;
+      left:11px;
+      top:50%;
+      transform:translateY(-50%);
+      color:#89968d;
+      font-size:13px;
+      pointer-events:none;
+    }
+    #post-payment-preview #postpay-search {
+      width:100%;
+      min-height:38px;
+      padding:8px 10px 8px 32px;
+      border:1px solid #3a5142;
+      border-radius:9px;
+      outline:none;
+      background:#101713;
+      color:#fff;
+      font:500 11px/1.2 Montserrat,Arial,sans-serif;
+    }
+    #post-payment-preview #postpay-search::placeholder { color:#849087; }
+    #post-payment-preview #postpay-search:focus {
+      border-color:#51bd7a;
+      box-shadow:0 0 0 3px rgba(45,174,100,.14);
+    }
+    #post-payment-preview #postpay-copy-all {
+      min-height:38px;
+      padding:8px 10px;
+      border:1px solid #317c53;
+      border-radius:9px;
+      background:#173b28;
+      color:#d9fbe5;
+      font:700 10px/1.2 Montserrat,Arial,sans-serif;
+      white-space:nowrap;
+      cursor:pointer;
+    }
+    #post-payment-preview #postpay-copy-all:hover { background:#20583a; }
+    #post-payment-preview #postpay-copy-all:disabled { opacity:.65; cursor:default; }
+    #post-payment-preview .postpay-number-count {
+      display:flex;
+      justify-content:space-between;
+      gap:8px;
+      margin:0 0 8px;
+      color:#b8e7ca;
+      font-size:10px;
+      font-weight:700;
+      line-height:1.35;
+    }
+    #post-payment-preview .postpay-number-count span:last-child {
+      color:#91a397;
+      font-weight:500;
+      text-align:right;
+    }
     #post-payment-preview .postpay-number-grid {
-      display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:7px;
+      display:grid;
+      grid-template-columns:repeat(auto-fill,minmax(50px,1fr));
+      gap:5px;
+      max-height:none;
     }
     #post-payment-preview .postpay-number {
-      display:flex; align-items:center; justify-content:center;
-      min-height:37px; padding:6px 3px;
-      border:1px solid #286347; border-radius:8px;
-      background:#10281d; color:#b5f4ce;
-      font-size:12px; font-weight:800; font-variant-numeric:tabular-nums;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      min-width:0;
+      min-height:31px;
+      padding:4px 2px;
+      border:1px solid #2b6848;
+      border-radius:7px;
+      background:linear-gradient(180deg,#142d20 0%,#102319 100%);
+      color:#c5f4d4;
+      font-size:10px;
+      font-weight:800;
+      line-height:1;
+      letter-spacing:.01em;
+      font-variant-numeric:tabular-nums;
+      box-shadow:inset 0 1px 0 rgba(255,255,255,.035);
     }
-    #post-payment-preview .postpay-number-heading { margin-top:18px; }
-    #post-payment-preview .postpay-loadmore {
-      display:inline-flex; align-items:center; justify-content:center; gap:4px;
-      border:1px solid #28a568; border-radius:999px; padding:6px 11px;
-      background:#123323; color:#baf5d0; font:700 12px/1.2 Montserrat,Arial,sans-serif;
-      white-space:nowrap; cursor:pointer; transition:background .15s ease,transform .15s ease;
+    #post-payment-preview .postpay-number[hidden] { display:none !important; }
+    #post-payment-preview .postpay-no-results {
+      margin:8px 0 0;
+      padding:12px;
+      border:1px dashed #4b5d51;
+      border-radius:9px;
+      color:#b9c8bd;
+      font-size:11px;
+      text-align:center;
     }
-    #post-payment-preview .postpay-loadmore:hover { background:#185136; transform:translateY(-1px); }
-    #post-payment-preview .postpay-loadmore span { font-size:16px; line-height:10px; }
-    #post-payment-preview .postpay-loadmore[hidden] { display:none!important; }
-    #post-payment-preview .postpay-number-count { margin:9px 0 0; color:#9a9a9a; font-size:10px; text-align:right; }
+    #post-payment-preview .postpay-copy-feedback {
+      min-height:15px;
+      margin:6px 0 0;
+      color:#a8e8bf;
+      font-size:10px;
+      line-height:1.4;
+    }
     #post-payment-preview .postpay-note {
-      margin:12px 0 0; color:#b7b7b7; font-size:11px; line-height:1.5;
+      margin:11px 0 0;
+      padding:9px 10px;
+      border:1px solid #55482b;
+      border-radius:9px;
+      background:#211f19;
+      color:#c9c0a9;
+      font-size:10px;
+      line-height:1.45;
     }
     #post-payment-preview .postpay-note strong { color:#ffe2a6; }
-    #post-payment-preview .postpay-upsell {
-      margin:16px 0 4px; padding:14px; border:1px solid #2e684a;
-      border-radius:13px; background:linear-gradient(145deg,#10251a 0%,#19251d 100%);
+    #post-payment-preview .postpay-open-offer {
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:8px;
+      width:100%;
+      min-height:46px;
+      margin:13px 0 10px;
+      padding:11px 14px;
+      border:1px solid #32b875;
+      border-radius:11px;
+      background:linear-gradient(135deg,#148b55 0%,#20a96b 100%);
+      color:#fff;
+      font:800 12px/1.25 Montserrat,Arial,sans-serif;
+      box-shadow:0 7px 18px rgba(13,120,70,.2);
+      cursor:pointer;
     }
-    #post-payment-preview .postpay-upsell-heading { margin:0 0 5px; color:#fff; font-size:16px; font-weight:800; line-height:1.3; }
-    #post-payment-preview .postpay-upsell-intro { margin:0 0 12px; color:#c6d6cb; font-size:12px; line-height:1.45; }
-    #post-payment-preview .postpay-upsell-options { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:8px; }
-    #post-payment-preview .postpay-upsell-option {
-      display:flex; flex-direction:column; align-items:center; min-width:0;
-      padding:12px 7px 10px; border:1px solid #34513e; border-radius:11px;
-      background:#171d19; text-align:center;
+    #post-payment-preview .postpay-open-offer:hover { filter:brightness(1.07); }
+    #post-payment-preview .postpay-home-link {
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      width:100%;
+      min-height:43px;
+      margin-top:8px;
+      border:1px solid #393939;
+      border-radius:10px;
+      background:#1a1a1a;
+      color:#e7e7e7;
+      font-size:11px;
+      font-weight:700;
+      text-decoration:none;
     }
-    #post-payment-preview .postpay-upsell-quantity { color:#b6f5ce; font-size:14px; font-weight:800; line-height:1.25; }
-    #post-payment-preview .postpay-upsell-label { margin:3px 0 7px; color:#aeb8b1; font-size:10px; }
-    #post-payment-preview .postpay-upsell-price { color:#fff; font-size:16px; font-weight:800; line-height:1.2; white-space:nowrap; }
-    #post-payment-preview .postpay-upsell-button {
-      display:flex; align-items:center; justify-content:center; width:100%; min-height:34px;
-      margin-top:10px; padding:7px 4px; border:1px solid #28a568; border-radius:8px;
-      background:#168d59; color:#fff; font:700 10px/1.2 Montserrat,Arial,sans-serif;
-      cursor:pointer; transition:background .15s ease,transform .15s ease;
+
+    /* Modal opcional de participação extra. */
+    #postpay-upsell-modal[hidden] { display:none !important; }
+    #postpay-upsell-modal {
+      position:fixed;
+      inset:0;
+      z-index:30000;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:14px;
+      isolation:isolate;
     }
-    #post-payment-preview .postpay-upsell-button:hover { background:#19a463; transform:translateY(-1px); }
-    #post-payment-preview .postpay-upsell-button[aria-pressed="true"] { background:#24513a; border-color:#8ee3ae; box-shadow:0 0 0 2px rgba(40,165,104,.2); }
-    #post-payment-preview .postpay-upsell-feedback {
-      display:none; margin:10px 0 0; padding:9px 10px; border:1px solid #69572e;
-      border-radius:8px; background:#2c2a21; color:#f6d58a; font-size:11px; line-height:1.45;
+    #postpay-upsell-modal .postpay-modal-backdrop {
+      position:absolute;
+      inset:0;
+      background:rgba(0,0,0,.78);
+      backdrop-filter:blur(5px);
+      -webkit-backdrop-filter:blur(5px);
+      animation:postpayBackdropIn .22s ease both;
     }
-    #post-payment-preview .postpay-upsell-feedback.is-visible { display:block; }
-    #post-payment-preview .postpay-upsell-footnote { margin:9px 0 0; color:#989f99; font-size:10px; line-height:1.45; }
-    @media (max-width:380px) {
-      #post-payment-preview .postpay-card { padding:12px; }
-      #post-payment-preview .postpay-number-grid { grid-template-columns:repeat(3,minmax(0,1fr)); gap:6px; }
-      #post-payment-preview .postpay-number { min-height:35px; font-size:12px; }
-      #post-payment-preview .postpay-title { font-size:15px; }
-      #post-payment-preview .postpay-upsell { padding:11px; }
-      #post-payment-preview .postpay-upsell-options { grid-template-columns:1fr; gap:8px; }
-      #post-payment-preview .postpay-upsell-option { display:grid; grid-template-columns:1fr auto; column-gap:10px; align-items:center; text-align:left; padding:10px; }
-      #post-payment-preview .postpay-upsell-quantity { grid-column:1; }
-      #post-payment-preview .postpay-upsell-label { grid-column:1; margin:3px 0 0; }
-      #post-payment-preview .postpay-upsell-price { grid-column:2; grid-row:1 / span 2; }
-      #post-payment-preview .postpay-upsell-button { grid-column:1 / -1; margin-top:9px; min-height:38px; font-size:11px; }
+    #postpay-upsell-modal .postpay-modal-dialog {
+      position:relative;
+      z-index:1;
+      width:min(100%,470px);
+      max-height:min(90vh,780px);
+      overflow:auto;
+      overscroll-behavior:contain;
+      padding:18px;
+      border:1px solid #39694b;
+      border-radius:19px;
+      background:linear-gradient(155deg,#1a251e 0%,#111713 66%,#101c15 100%);
+      color:#fff;
+      box-shadow:0 22px 70px rgba(0,0,0,.55),0 0 0 1px rgba(115,224,157,.08);
+      animation:postpayDialogIn .3s cubic-bezier(.2,.8,.2,1) both;
     }
+    #postpay-upsell-modal .postpay-modal-close {
+      position:absolute;
+      top:11px;
+      right:11px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      width:33px;
+      height:33px;
+      border:1px solid #3c5143;
+      border-radius:50%;
+      background:#202b23;
+      color:#d6e3d9;
+      font-size:19px;
+      cursor:pointer;
+    }
+    #postpay-upsell-modal .postpay-modal-kicker {
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+      margin:0 38px 10px 0;
+      padding:6px 9px;
+      border:1px solid #4e795c;
+      border-radius:999px;
+      background:#1a3826;
+      color:#bdf2cc;
+      font-size:9px;
+      font-weight:800;
+      letter-spacing:.055em;
+    }
+    #postpay-upsell-modal .postpay-modal-title {
+      margin:0 32px 7px 0;
+      color:#fff;
+      font-size:22px;
+      font-weight:900;
+      line-height:1.16;
+      letter-spacing:-.035em;
+    }
+    #postpay-upsell-modal .postpay-modal-intro {
+      margin:0 0 14px;
+      color:#c1cec4;
+      font-size:11px;
+      line-height:1.55;
+    }
+    #postpay-upsell-modal .postpay-modal-choices {
+      display:grid;
+      gap:9px;
+    }
+    #postpay-upsell-modal .postpay-modal-option {
+      display:grid;
+      grid-template-columns:minmax(0,1fr) auto;
+      align-items:center;
+      gap:4px 12px;
+      padding:12px;
+      border:1px solid #35483a;
+      border-radius:13px;
+      background:rgba(255,255,255,.035);
+    }
+    #postpay-upsell-modal .postpay-modal-option.featured {
+      border-color:#54a873;
+      background:linear-gradient(110deg,rgba(31,105,61,.34),rgba(255,255,255,.035));
+    }
+    #postpay-upsell-modal .postpay-modal-option-title {
+      color:#eaffef;
+      font-size:14px;
+      font-weight:900;
+      line-height:1.25;
+    }
+    #postpay-upsell-modal .postpay-modal-option-detail {
+      margin-top:3px;
+      color:#aebbb1;
+      font-size:10px;
+      line-height:1.35;
+    }
+    #postpay-upsell-modal .postpay-modal-option-price {
+      color:#fff;
+      font-size:19px;
+      font-weight:900;
+      line-height:1;
+      white-space:nowrap;
+      font-variant-numeric:tabular-nums;
+    }
+    #postpay-upsell-modal .postpay-modal-option-badge {
+      display:inline-block;
+      margin:0 0 5px;
+      padding:4px 6px;
+      border-radius:5px;
+      background:#214a30;
+      color:#c7f6d4;
+      font-size:8px;
+      font-weight:900;
+      letter-spacing:.045em;
+    }
+    #postpay-upsell-modal .postpay-modal-cta {
+      grid-column:1 / -1;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      width:100%;
+      min-height:39px;
+      margin-top:6px;
+      padding:9px 12px;
+      border:1px solid #34bd7a;
+      border-radius:9px;
+      background:linear-gradient(135deg,#168d59,#20a86b);
+      color:#fff;
+      font:800 11px/1.2 Montserrat,Arial,sans-serif;
+      cursor:pointer;
+      transition:filter .15s ease,transform .15s ease;
+    }
+    #postpay-upsell-modal .postpay-modal-cta:hover { filter:brightness(1.08); transform:translateY(-1px); }
+    #postpay-upsell-modal .postpay-modal-cta:disabled { opacity:.65; cursor:wait; transform:none; }
+    #postpay-upsell-modal .postpay-modal-footnote {
+      margin:11px 0 0;
+      color:#9aa89d;
+      font-size:9px;
+      line-height:1.5;
+      text-align:center;
+    }
+    #postpay-upsell-modal .postpay-modal-decline {
+      display:block;
+      width:100%;
+      margin-top:8px;
+      padding:9px 8px;
+      border:0;
+      background:transparent;
+      color:#c5d0c8;
+      font:600 10px/1.3 Montserrat,Arial,sans-serif;
+      text-decoration:underline;
+      text-underline-offset:3px;
+      cursor:pointer;
+    }
+    #postpay-upsell-modal button:focus-visible,
+    #post-payment-preview button:focus-visible,
+    #post-payment-preview input:focus-visible {
+      outline:3px solid #ffe2a6;
+      outline-offset:2px;
+    }
+    @keyframes postpayBackdropIn { from {opacity:0} to {opacity:1} }
+    @keyframes postpayDialogIn { from {opacity:0;transform:translateY(14px) scale(.985)} to {opacity:1;transform:translateY(0) scale(1)} }
+    @media (max-width:600px) {
+      #post-payment-preview { padding-left:8px; padding-right:8px; }
+      #post-payment-preview .preview-disclaimer { padding:13px; }
+      #post-payment-preview .preview-disclaimer strong { font-size:14px; }
+      #post-payment-preview .postpay-numbers-card { padding:12px; }
+      #post-payment-preview .postpay-number-header h2 { font-size:15px; }
+      #post-payment-preview .postpay-summary-grid { gap:5px; }
+      #post-payment-preview .postpay-summary-item { padding:8px 4px; }
+      #post-payment-preview .postpay-summary-value { font-size:14px; }
+      #post-payment-preview .postpay-number-grid { grid-template-columns:repeat(auto-fill,minmax(43px,1fr)); gap:4px; }
+      #post-payment-preview .postpay-number { min-height:29px; font-size:9px; border-radius:6px; }
+      #post-payment-preview .postpay-number-tools { grid-template-columns:minmax(0,1fr) auto; gap:5px; }
+      #post-payment-preview #postpay-copy-all { padding:7px 8px; font-size:9px; }
+      #postpay-upsell-modal { padding:9px; }
+      #postpay-upsell-modal .postpay-modal-dialog { padding:15px 13px 13px; border-radius:16px; max-height:92vh; }
+      #postpay-upsell-modal .postpay-modal-title { font-size:20px; }
+      #postpay-upsell-modal .postpay-modal-option { padding:10px; }
+      #postpay-upsell-modal .postpay-modal-option-price { font-size:18px; }
+    }
+    @media (max-width:360px) {
+      #post-payment-preview .postpay-number-grid { grid-template-columns:repeat(4,minmax(0,1fr)); }
+      #post-payment-preview .postpay-number { font-size:10px; }
+    }
+    @media (prefers-reduced-motion:reduce) {
+      #postpay-upsell-modal .postpay-modal-backdrop,
+      #postpay-upsell-modal .postpay-modal-dialog { animation:none; }
+      #postpay-upsell-modal .postpay-modal-cta { transition:none; }
+    }
+
   </style>
 
-  <div class="mb-3">
-    <div class="row justify-content-between w-100 align-items-center">
-      <div class="col">
-        <div class="app-title">
-          <h1 class="app-title d-flex align-items-center gap-2">🧾MEUS NÚMEROS</h1>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <section id="post-payment-preview" aria-label="Prévia da tela pós-compra">
-    <div class="preview-disclaimer" role="note">
-      <i class="bi bi-info-circle-fill" aria-hidden="true"></i>
-      <div><strong>🎉 SUA PARTICIPAÇÃO ESTÁ REGISTRADA!</strong><br>
-      Parabéns! Você deu mais um passo para concorrer a esse prêmio incrível! 🚛🏆
-
-Confira abaixo os números vinculados à sua participação e guarde esta página para consultar sempre que precisar.
-
-🍀 Agora é torcer e ficar na expectativa!
-
-Continue acompanhando a Rota 22 Premiações para não perder nenhuma novidade sobre a campanha.</div>
-    </div>
-
-    <div class="postpay-hero">
-      <div class="postpay-icon"><i class="bi bi-check2-circle" aria-hidden="true"></i></div>
+  <section id="post-payment-preview" aria-label="Prévia demonstrativa da tela pós-compra">
+    <div class="preview-disclaimer" role="status" aria-live="polite">
+      <i class="bi bi-check-circle-fill" aria-hidden="true"></i>
       <div>
-        <h2 class="postpay-title">🎁 UMA OPORTUNIDADE EXTRA PARA VOCÊ!</h2>
-        <p class="postpay-subtitle">⚡ Já conferiu as chances desta campanha?
-
-São 86% de chance de bilhetes premiados, segundo as condições da promoção!</p>
+        <strong>🎉 SUA PARTICIPAÇÃO ESTÁ REGISTRADA!</strong>
+        <div>Confira sua lista completa de números logo abaixo.</div>
+        <small></small>
       </div>
     </div>
 
-    <div class="postpay-card">
-      <div class="postpay-card-heading">
-        <span>Resumo da participação</span>
-        <span class="postpay-pill"><i class="bi bi-eye"></i> ATIVO</span>
+    <div class="postpay-card postpay-numbers-card">
+      <div class="postpay-number-header">
+        <h2>🧾 MEUS NÚMEROS</h2>
+        <span class="postpay-demo-tag">LISTA COMPLETA</span>
       </div>
-      <p class="postpay-description">🔥 A emoção pode estar no próximo bilhete! Já pensou em participar e encontrar um bilhete premiado?</p>
+      <p class="postpay-number-intro">Todos os números aparecem aqui, em uma grade compacta. Você pode pesquisar um número específico ou copiar a lista inteira.</p>
 
-      <div class="postpay-stats">
-        <div class="postpay-stat">
-          <div class="postpay-stat-label">Status </div>
-          <div class="postpay-stat-value" style="color:#f6d58a">ATIVO</div>
+      <div class="postpay-summary-grid" aria-label="Resumo da lista demonstrativa">
+        <div class="postpay-summary-item">
+          <span class="postpay-summary-label">Total </span>
+          <strong class="postpay-summary-value">175</strong>
+          <span class="postpay-summary-sub">números </span>
         </div>
-        <div class="postpay-stat">
-          <div class="postpay-stat-label">Chances de bilhetes premiados</div>
-          <div class="postpay-stat-value">86%</div>
+        <div class="postpay-summary-item">
+          <span class="postpay-summary-label">Chance de números premiados</span>
+          <strong class="postpay-summary-value">89%</strong>
+          <span class="postpay-summary-sub">Próxima compra</span>
+        </div>
+        <div class="postpay-summary-item">
+          <span class="postpay-summary-label">Visualização</span>
+          <strong class="postpay-summary-value">Completa</strong>
+          <span class="postpay-summary-sub"></span>
         </div>
       </div>
 
-      <section class="postpay-upsell" aria-labelledby="postpay-upsell-heading">
-        <h3 class="postpay-upsell-heading" id="postpay-upsell-heading">🚛 QUE TAL ADICIONAR MAIS NÚMEROS?</h3>
-        <p class="postpay-upsell-intro">Escolha uma das opções de participação adicional e confira o valor antes de continuar.</p>
-        <div class="postpay-upsell-options" role="group" aria-label="Escolha a quantidade adicional para continuar na página de compra">
-          <article class="postpay-upsell-option">
-            <div class="postpay-upsell-quantity">+100 cotas</div>
-            <div class="postpay-upsell-label">Participação adicional</div>
-            <div class="postpay-upsell-price">R$ 12,00</div>
-            <button class="postpay-upsell-button" type="button" data-upsell-quantity="100" data-upsell-price="12,00" >CONTINUAR COM +100 COTAS</button>
-          </article>
-          <article class="postpay-upsell-option">
-            <div class="postpay-upsell-quantity">+200 cotas</div>
-            <div class="postpay-upsell-label">Participação adicional</div>
-            <div class="postpay-upsell-price">R$ 22,00</div>
-            <button class="postpay-upsell-button" type="button" data-upsell-quantity="200" data-upsell-price="22,00" >CONTINUAR COM +200 COTAS</button>
-          </article>
-          <article class="postpay-upsell-option">
-            <div class="postpay-upsell-quantity">+500 cotas</div>
-            <div class="postpay-upsell-label">Participação adicional</div>
-            <div class="postpay-upsell-price">R$ 50,00</div>
-            <button class="postpay-upsell-button" type="button" data-upsell-quantity="500" data-upsell-price="50,00" >CONTINUAR COM +500 COTAS</button>
-          </article>
-        </div>
-        <div id="postpay-upsell-feedback" class="postpay-upsell-feedback" role="status" aria-live="polite"></div>
-        <p class="postpay-upsell-footnote">Ao escolher uma opção, você voltará à página de compra com essa quantidade pré-selecionada. Confira o valor atualizado e finalize a nova compra se desejar. A opção não gera uma cobrança automaticamente.</p>
-      </section>
-
-      <div class="postpay-card-heading postpay-number-heading">
-        <span>MEUS NÚMEROS</span>
-        <button id="postpay-loadmore" class="postpay-loadmore" type="button" aria-controls="postpay-number-grid">
-          Ver mais <span aria-hidden="true">+</span>
-        </button>
+      <div class="postpay-number-tools">
+        <label class="postpay-search-wrap">
+          <i class="bi bi-search" aria-hidden="true"></i>
+          <input id="postpay-search" type="search" inputmode="numeric" autocomplete="off" maxlength="6" placeholder="Buscar um número..." aria-label="Buscar um número na lista">
+        </label>
+        <button id="postpay-copy-all" type="button"><i class="bi bi-copy" aria-hidden="true"></i> Copiar lista</button>
       </div>
-      <p class="postpay-description">Clique em “Ver mais +” para revelar os próximos grupos de 60. Os números são formatados com seis dígitos.</p>
-      <div id="postpay-number-grid" class="postpay-number-grid" aria-live="polite"></div>
-      <p class="postpay-number-count" id="postpay-number-count">Carregando lista ...</p>
-      <p class="postpay-note"><strong></strong> </p>
+
+      <p class="postpay-number-count" id="postpay-number-count" aria-live="polite">
+        <span>175 de 175 números exibidos</span>
+        <span></span>
+      </p>
+
+      <div id="postpay-number-grid" class="postpay-number-grid" aria-label="Todos os números de demonstração">
+        <span class="postpay-number">115342</span><span class="postpay-number">118435</span><span class="postpay-number">119332</span><span class="postpay-number">122863</span><span class="postpay-number">122890</span><span class="postpay-number">157591</span><span class="postpay-number">165075</span><span class="postpay-number">166173</span><span class="postpay-number">183397</span><span class="postpay-number">189100</span><span class="postpay-number">192990</span><span class="postpay-number">194463</span><span class="postpay-number">204527</span><span class="postpay-number">210887</span><span class="postpay-number">211866</span><span class="postpay-number">222460</span><span class="postpay-number">226375</span><span class="postpay-number">239200</span><span class="postpay-number">240641</span><span class="postpay-number">242187</span><span class="postpay-number">270909</span><span class="postpay-number">272514</span><span class="postpay-number">274784</span><span class="postpay-number">277850</span><span class="postpay-number">280425</span><span class="postpay-number">283797</span><span class="postpay-number">284139</span><span class="postpay-number">287567</span><span class="postpay-number">296618</span><span class="postpay-number">302343</span><span class="postpay-number">305791</span><span class="postpay-number">307696</span><span class="postpay-number">314794</span><span class="postpay-number">326488</span><span class="postpay-number">333141</span><span class="postpay-number">350895</span><span class="postpay-number">357266</span><span class="postpay-number">360899</span><span class="postpay-number">368076</span><span class="postpay-number">371197</span><span class="postpay-number">374291</span><span class="postpay-number">374833</span><span class="postpay-number">377962</span><span class="postpay-number">383045</span><span class="postpay-number">386307</span><span class="postpay-number">387458</span><span class="postpay-number">392044</span><span class="postpay-number">394504</span><span class="postpay-number">398859</span><span class="postpay-number">400549</span><span class="postpay-number">406404</span><span class="postpay-number">412757</span><span class="postpay-number">414503</span><span class="postpay-number">414845</span><span class="postpay-number">415659</span><span class="postpay-number">431613</span><span class="postpay-number">437933</span><span class="postpay-number">438662</span><span class="postpay-number">443181</span><span class="postpay-number">443363</span><span class="postpay-number">452791</span><span class="postpay-number">460050</span><span class="postpay-number">460660</span><span class="postpay-number">461292</span><span class="postpay-number">470599</span><span class="postpay-number">471439</span><span class="postpay-number">471637</span><span class="postpay-number">472496</span><span class="postpay-number">477588</span><span class="postpay-number">478867</span><span class="postpay-number">482930</span><span class="postpay-number">486176</span><span class="postpay-number">491852</span><span class="postpay-number">500582</span><span class="postpay-number">509863</span><span class="postpay-number">518953</span><span class="postpay-number">527063</span><span class="postpay-number">535306</span><span class="postpay-number">537329</span><span class="postpay-number">540599</span><span class="postpay-number">547585</span><span class="postpay-number">548161</span><span class="postpay-number">566846</span><span class="postpay-number">568185</span><span class="postpay-number">571796</span><span class="postpay-number">574243</span><span class="postpay-number">579374</span><span class="postpay-number">588211</span><span class="postpay-number">588562</span><span class="postpay-number">592094</span><span class="postpay-number">597042</span><span class="postpay-number">600085</span><span class="postpay-number">603138</span><span class="postpay-number">608152</span><span class="postpay-number">625607</span><span class="postpay-number">627462</span><span class="postpay-number">627941</span><span class="postpay-number">630637</span><span class="postpay-number">634365</span><span class="postpay-number">644487</span><span class="postpay-number">646281</span><span class="postpay-number">646859</span><span class="postpay-number">650032</span><span class="postpay-number">657554</span><span class="postpay-number">658797</span><span class="postpay-number">660650</span><span class="postpay-number">663606</span><span class="postpay-number">671905</span><span class="postpay-number">676302</span><span class="postpay-number">676326</span><span class="postpay-number">683058</span><span class="postpay-number">686930</span><span class="postpay-number">689877</span><span class="postpay-number">697222</span><span class="postpay-number">699725</span><span class="postpay-number">703121</span><span class="postpay-number">709908</span><span class="postpay-number">713634</span><span class="postpay-number">716479</span><span class="postpay-number">717346</span><span class="postpay-number">724704</span><span class="postpay-number">745148</span><span class="postpay-number">753606</span><span class="postpay-number">755390</span><span class="postpay-number">761891</span><span class="postpay-number">763835</span><span class="postpay-number">764951</span><span class="postpay-number">773917</span><span class="postpay-number">783428</span><span class="postpay-number">784211</span><span class="postpay-number">786139</span><span class="postpay-number">787105</span><span class="postpay-number">787727</span><span class="postpay-number">802549</span><span class="postpay-number">808903</span><span class="postpay-number">809815</span><span class="postpay-number">813431</span><span class="postpay-number">815398</span><span class="postpay-number">819590</span><span class="postpay-number">823088</span><span class="postpay-number">823614</span><span class="postpay-number">830605</span><span class="postpay-number">837314</span><span class="postpay-number">841972</span><span class="postpay-number">842092</span><span class="postpay-number">847193</span><span class="postpay-number">859115</span><span class="postpay-number">868349</span><span class="postpay-number">872477</span><span class="postpay-number">872725</span><span class="postpay-number">876790</span><span class="postpay-number">877239</span><span class="postpay-number">881193</span><span class="postpay-number">881615</span><span class="postpay-number">886094</span><span class="postpay-number">899292</span><span class="postpay-number">908253</span><span class="postpay-number">908885</span><span class="postpay-number">915763</span><span class="postpay-number">917039</span><span class="postpay-number">917780</span><span class="postpay-number">919346</span><span class="postpay-number">923727</span><span class="postpay-number">933089</span><span class="postpay-number">940111</span><span class="postpay-number">941279</span><span class="postpay-number">941885</span><span class="postpay-number">942766</span><span class="postpay-number">957956</span><span class="postpay-number">958649</span><span class="postpay-number">975892</span><span class="postpay-number">983948</span><span class="postpay-number">987183</span><span class="postpay-number">988111</span><span class="postpay-number">996378</span>
+      </div>
+      <p id="postpay-no-results" class="postpay-no-results" hidden>Nenhum número encontrado. Confira os dígitos e tente novamente.</p>
+      <p id="postpay-copy-feedback" class="postpay-copy-feedback" role="status" aria-live="polite"></p>
+
+      <p class="postpay-note"><strong>Nenhum número premiado encontrado:</strong> aproveite sua chance e tente novamente!</p>
     </div>
 
-    <a href="https://trucksoficial.netlify.app/" class="btn btn-primary w-100 rounded-new text-decoration-none d-flex align-items-center justify-content-center" style="min-height:48px;font-weight:600;">
-      VOLTAR À PÁGINA PRINCIPAL
-    </a>
+    <button id="postpay-open-offer" class="postpay-open-offer" type="button">
+      <i class="bi bi-stars" aria-hidden="true"></i>
+      VER OPÇÕES DE PARTICIPAÇÃO EXTRA
+      <i class="bi bi-arrow-right" aria-hidden="true"></i>
+    </button>
+
+    <a href="https://trucksoficial.netlify.app/" class="postpay-home-link">VOLTAR À PÁGINA PRINCIPAL</a>
   </section>
 
-<br><br><br><br><br><br><br><br><br>
+  <div id="postpay-upsell-modal" class="postpay-modal" role="presentation" hidden aria-hidden="true">
+    <div class="postpay-modal-backdrop" data-postpay-close="true"></div>
+    <section class="postpay-modal-dialog" role="dialog" aria-modal="true" aria-labelledby="postpay-modal-title" aria-describedby="postpay-modal-intro" tabindex="-1">
+      <button class="postpay-modal-close" type="button" data-postpay-close="true" aria-label="Fechar oferta">×</button>
+      <div class="postpay-modal-kicker"><i class="bi bi-stars" aria-hidden="true"></i> UMA OPÇÃO EXTRA PARA VOCÊ</div>
+      <h2 class="postpay-modal-title" id="postpay-modal-title">Quer aumentar suas chances?</h2>
+      <p class="postpay-modal-intro" id="postpay-modal-intro">Sua participação atual continua como está. Agora você pode participar com um pouco mais de sorte! Escolha uma quantidade adicional para abrir a página de compra já com essa opção selecionada.</p>
+
+      <div class="postpay-modal-choices" role="group" aria-label="Opções de participação adicional">
+        <article class="postpay-modal-option">
+          <div>
+            <div class="postpay-modal-option-title">+100 cotas</div>
+            <div class="postpay-modal-option-detail">R$ 0,12 por cota nesta opção</div>
+          </div>
+          <div class="postpay-modal-option-price">R$ 12,00</div>
+          <button class="postpay-modal-cta" type="button" data-upsell-quantity="100">CONTINUAR COM +100 COTAS</button>
+        </article>
+
+        <article class="postpay-modal-option">
+          <div>
+            <div class="postpay-modal-option-title">+200 cotas</div>
+            <div class="postpay-modal-option-detail">R$ 0,11 por cota nesta opção</div>
+          </div>
+          <div class="postpay-modal-option-price">R$ 22,00</div>
+          <button class="postpay-modal-cta" type="button" data-upsell-quantity="200">CONTINUAR COM +200 COTAS</button>
+        </article>
+
+        <article class="postpay-modal-option featured">
+          <div>
+            <span class="postpay-modal-option-badge">MENOR VALOR POR COTA</span>
+            <div class="postpay-modal-option-title">+500 cotas</div>
+            <div class="postpay-modal-option-detail">R$ 0,10 por cota nesta opção</div>
+          </div>
+          <div class="postpay-modal-option-price">R$ 50,00</div>
+          <button class="postpay-modal-cta" type="button" data-upsell-quantity="500">CONTINUAR COM +500 COTAS</button>
+        </article>
+      </div>
+
+      <p class="postpay-modal-footnote">A escolha não gera cobrança automática e não altera a participação anterior. Na próxima página, você confere os dados e o valor antes de decidir concluir a nova compra.</p>
+      <button class="postpay-modal-decline" type="button" data-postpay-close="true">Agora não, quero continuar conferindo meus números</button>
+    </section>
+  </div>
+
+
 
 
 </div>
@@ -1997,261 +2351,256 @@ document.addEventListener("DOMContentLoaded", function() {
 
 
 </div>
-<script id="postpay-number-renderer">
+<script id="postpay-number-tools">
 (function () {
-  // Lista estática de demonstração para testar grandes quantidades na interface.
-  // Não representa números comprados/reservados nem confirma pagamento.
-  var demoNumbers = [
-      115342,
-      118435,
-      119332,
-      122863,
-      122890,
-      157591,
-      165075,
-      166173,
-      183397,
-      189100,
-      192990,
-      194463,
-      204527,
-      210887,
-      211866,
-      222460,
-      226375,
-      239200,
-      240641,
-      242187,
-      270909,
-      272514,
-      274784,
-      277850,
-      280425,
-      283797,
-      284139,
-      287567,
-      296618,
-      302343,
-      305791,
-      307696,
-      314794,
-      326488,
-      333141,
-      350895,
-      357266,
-      360899,
-      368076,
-      371197,
-      374291,
-      374833,
-      377962,
-      383045,
-      386307,
-      387458,
-      392044,
-      394504,
-      398859,
-      400549,
-      406404,
-      412757,
-      414503,
-      414845,
-      415659,
-      431613,
-      437933,
-      438662,
-      443181,
-      443363,
-      452791,
-      460050,
-      460660,
-      461292,
-      470599,
-      471439,
-      471637,
-      472496,
-      477588,
-      478867,
-      482930,
-      486176,
-      491852,
-      500582,
-      509863,
-      518953,
-      527063,
-      535306,
-      537329,
-      540599,
-      547585,
-      548161,
-      566846,
-      568185,
-      571796,
-      574243,
-      579374,
-      588211,
-      588562,
-      592094,
-      597042,
-      600085,
-      603138,
-      608152,
-      625607,
-      627462,
-      627941,
-      630637,
-      634365,
-      644487,
-      646281,
-      646859,
-      650032,
-      657554,
-      658797,
-      660650,
-      663606,
-      671905,
-      676302,
-      676326,
-      683058,
-      686930,
-      689877,
-      697222,
-      699725,
-      703121,
-      709908,
-      713634,
-      716479,
-      717346,
-      724704,
-      745148,
-      753606,
-      755390,
-      761891,
-      763835,
-      764951,
-      773917,
-      783428,
-      784211,
-      786139,
-      787105,
-      787727,
-      802549,
-      808903,
-      809815,
-      813431,
-      815398,
-      819590,
-      823088,
-      823614,
-      830605,
-      837314,
-      841972,
-      842092,
-      847193,
-      859115,
-      868349,
-      872477,
-      872725,
-      876790,
-      877239,
-      881193,
-      881615,
-      886094,
-      899292,
-      908253,
-      908885,
-      915763,
-      917039,
-      917780,
-      919346,
-      923727,
-      933089,
-      940111,
-      941279,
-      941885,
-      942766,
-      957956,
-      958649,
-      975892,
-      983948,
-      987183,
-      988111,
-      996378
-  ];
+  var root = document.getElementById('post-payment-preview');
+  if (!root) return;
 
-  function renderWhenReady() {
-    var grid = document.getElementById('postpay-number-grid');
-    var count = document.getElementById('postpay-number-count');
-    var button = document.getElementById('postpay-loadmore');
-    if (!grid || !count || !button) return;
+  var grid = document.getElementById('postpay-number-grid');
+  var search = document.getElementById('postpay-search');
+  var count = document.getElementById('postpay-number-count');
+  var noResults = document.getElementById('postpay-no-results');
+  var copyButton = document.getElementById('postpay-copy-all');
+  var copyFeedback = document.getElementById('postpay-copy-feedback');
+  if (!grid) return;
 
-    var shown = 60;
-    var pageSize = 60;
+  var numberNodes = Array.prototype.slice.call(grid.querySelectorAll('.postpay-number'));
+  var allNumbers = numberNodes.map(function (node) { return node.textContent.trim(); });
 
-    function draw() {
-      var fragment = document.createDocumentFragment();
-      demoNumbers.slice(0, shown).forEach(function (number) {
-        var chip = document.createElement('span');
-        chip.className = 'postpay-number';
-        chip.textContent = String(number).padStart(6, '0');
-        fragment.appendChild(chip);
-      });
-      grid.replaceChildren(fragment);
-      count.textContent = shown + ' de ' + demoNumbers.length + ' números de demonstração exibidos';
-      button.hidden = shown >= demoNumbers.length;
-      button.setAttribute('aria-label', shown >= demoNumbers.length ? 'Todos os números de demonstração foram exibidos' : 'Ver mais números de demonstração');
+  function applySearch() {
+    var term = search ? search.value.replace(/\D/g, '').slice(0, 6) : '';
+    var visible = 0;
+
+    numberNodes.forEach(function (node) {
+      var matches = !term || node.textContent.indexOf(term) !== -1;
+      node.hidden = !matches;
+      if (matches) visible++;
+    });
+
+    if (count) {
+      var left = visible + ' de ' + numberNodes.length + ' números exibidos';
+      var right = term ? 'Busca: ' + term : 'Lista  completa';
+      count.innerHTML = '<span></span><span></span>';
+      count.children[0].textContent = left;
+      count.children[1].textContent = right;
     }
 
-    button.addEventListener('click', function () {
-      shown = Math.min(shown + pageSize, demoNumbers.length);
-      draw();
-    });
+    if (noResults) noResults.hidden = visible !== 0;
+    if (copyButton) copyButton.innerHTML = term
+      ? '<i class="bi bi-copy" aria-hidden="true"></i> Copiar resultados'
+      : '<i class="bi bi-copy" aria-hidden="true"></i> Copiar lista';
 
-    draw();
+    if (copyFeedback) copyFeedback.textContent = '';
   }
 
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', renderWhenReady, { once: true });
-  } else {
-    renderWhenReady();
+  function fallbackCopy(text) {
+    var field = document.createElement('textarea');
+    field.value = text;
+    field.setAttribute('readonly', '');
+    field.style.position = 'fixed';
+    field.style.opacity = '0';
+    field.style.pointerEvents = 'none';
+    document.body.appendChild(field);
+    field.select();
+    var copied = false;
+    try { copied = document.execCommand('copy'); } catch (_) {}
+    field.remove();
+    return copied;
   }
+
+  async function copyVisibleNumbers() {
+    var visibleNumbers = numberNodes
+      .filter(function (node) { return !node.hidden; })
+      .map(function (node) { return node.textContent.trim(); });
+    if (!visibleNumbers.length) return;
+
+    var text = visibleNumbers.join('\n');
+    var copied = false;
+
+    try {
+      if (navigator.clipboard && window.isSecureContext) {
+        await navigator.clipboard.writeText(text);
+        copied = true;
+      } else {
+        copied = fallbackCopy(text);
+      }
+    } catch (_) {
+      copied = fallbackCopy(text);
+    }
+
+    if (copyFeedback) {
+      copyFeedback.textContent = copied
+        ? visibleNumbers.length + ' número(s) copiado(s).'
+        : 'Não foi possível copiar automaticamente neste navegador.';
+    }
+  }
+
+  if (search) search.addEventListener('input', applySearch);
+  if (copyButton) copyButton.addEventListener('click', copyVisibleNumbers);
+  applySearch();
 })();
 </script>
-<script id="postpay-upsell-preview-handler">
+<script id="postpay-upsell-modal-controller">
 (function () {
-  var section = document.getElementById('post-payment-preview');
-  if (!section) return;
+  var modal = document.getElementById('postpay-upsell-modal');
+  var numberCard = document.querySelector('#post-payment-preview .postpay-numbers-card');
+  var openButton = document.getElementById('postpay-open-offer');
+  if (!modal || !numberCard || !openButton) return;
 
-  var buttons = section.querySelectorAll('.postpay-upsell-button');
+  var dialog = modal.querySelector('.postpay-modal-dialog');
+  var closeButtons = Array.prototype.slice.call(modal.querySelectorAll('[data-postpay-close="true"]'));
+  var purchaseButtons = Array.prototype.slice.call(modal.querySelectorAll('[data-upsell-quantity]'));
   var allowedQuantities = [100, 200, 500];
   var purchasePage = 'https://trucksoficial.netlify.app/';
+  var navigating = false;
+  var previousFocus = null;
+  var previousBodyOverflow = '';
+  var autoTimer = null;
+  var autoStarted = false;
+  var seenKey = 'rota22_postpay_upsell_modal_seen_v3';
 
-  buttons.forEach(function (button) {
+  function hasSeenModal() {
+    try { return sessionStorage.getItem(seenKey) === '1'; }
+    catch (_) { return false; }
+  }
+
+  function markSeen() {
+    try { sessionStorage.setItem(seenKey, '1'); } catch (_) {}
+  }
+
+  function showModal(manual) {
+    if (!modal.hidden || navigating) return;
+    if (!manual && hasSeenModal()) return;
+
+    previousFocus = document.activeElement;
+    previousBodyOverflow = document.body.style.overflow;
+    modal.hidden = false;
+    modal.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+    markSeen();
+
+    window.requestAnimationFrame(function () {
+      var closeButton = modal.querySelector('.postpay-modal-close');
+      if (closeButton) closeButton.focus();
+    });
+  }
+
+  function closeModal() {
+    if (modal.hidden) return;
+    modal.hidden = true;
+    modal.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = previousBodyOverflow;
+    if (previousFocus && typeof previousFocus.focus === 'function') {
+      previousFocus.focus();
+    }
+  }
+
+  function buildDestination(quantity) {
+    var destination = new URL(purchasePage);
+    destination.searchParams.set('upsell_qty', String(quantity));
+
+    var currentParams = new URLSearchParams(window.location.search);
+    [
+      'utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term',
+      'src', 'sck', 'fbclid', 'gclid'
+    ].forEach(function (key) {
+      var value = currentParams.get(key);
+      if (value && !destination.searchParams.has(key)) {
+        destination.searchParams.set(key, value);
+      }
+    });
+
+    return destination.toString();
+  }
+
+  function goToPurchase(button) {
+    if (navigating) return;
+    var quantity = Number(button.getAttribute('data-upsell-quantity'));
+    if (!allowedQuantities.includes(quantity)) return;
+
+    navigating = true;
+    purchaseButtons.forEach(function (item) {
+      item.disabled = true;
+      item.textContent = item === button ? 'ABRINDO OPÇÃO...' : 'AGUARDE...';
+      item.setAttribute('aria-busy', 'true');
+    });
+    button.textContent = 'ABRINDO OPÇÃO...';
+
+    window.location.assign(buildDestination(quantity));
+  }
+
+  closeButtons.forEach(function (button) {
+    button.addEventListener('click', closeModal);
+  });
+
+  openButton.addEventListener('click', function () {
+    showModal(true);
+  });
+
+  purchaseButtons.forEach(function (button) {
     button.addEventListener('click', function () {
-      var quantity = Number(button.getAttribute('data-upsell-quantity'));
-      if (!allowedQuantities.includes(quantity)) return;
+      goToPurchase(button);
+    });
+  });
 
-      button.disabled = true;
-      button.textContent = 'ABRINDO PÁGINA DE COMPRA...';
+  document.addEventListener('keydown', function (event) {
+    if (modal.hidden) return;
 
-      // Leva o cliente à página principal com a quantidade escolhida.
-      // Preserva parâmetros de anúncios/rastreamento que já estejam na URL.
-      var destination = new URL(purchasePage);
-      destination.searchParams.set('upsell_qty', String(quantity));
-      var currentParams = new URLSearchParams(window.location.search);
-      [
-        'utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term',
-        'src', 'sck', 'fbclid', 'gclid'
-      ].forEach(function (key) {
-        var value = currentParams.get(key);
-        if (value && !destination.searchParams.has(key)) {
-          destination.searchParams.set(key, value);
+    if (event.key === 'Escape') {
+      event.preventDefault();
+      closeModal();
+      return;
+    }
+
+    if (event.key === 'Tab' && dialog) {
+      var focusable = Array.prototype.slice.call(
+        dialog.querySelectorAll('button:not([disabled]), a[href], input:not([disabled]), [tabindex]:not([tabindex="-1"])')
+      );
+      if (!focusable.length) return;
+      var first = focusable[0];
+      var last = focusable[focusable.length - 1];
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault(); last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault(); first.focus();
+      }
+    }
+  });
+
+  // Oferta automática somente depois de a área de números ter entrado na tela
+  // e permanecer visível por 10 segundos. Pode ser reaberta pelo botão manual.
+  function startAutoTimer() {
+    if (autoStarted || hasSeenModal()) return;
+    autoStarted = true;
+    autoTimer = window.setTimeout(function () {
+      showModal(false);
+    }, 10000);
+  }
+
+  if ('IntersectionObserver' in window) {
+    var observer = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting && entry.intersectionRatio >= 0.2) {
+          startAutoTimer();
+          observer.disconnect();
         }
       });
+    }, { threshold: [0.2] });
+    observer.observe(numberCard);
+  } else {
+    startAutoTimer();
+  }
 
-      window.location.assign(destination.toString());
-    });
+  document.addEventListener('visibilitychange', function () {
+    if (document.hidden && autoTimer) {
+      window.clearTimeout(autoTimer);
+      autoTimer = null;
+      autoStarted = false;
+    } else if (!document.hidden && !hasSeenModal() && !autoStarted) {
+      startAutoTimer();
+    }
   });
 })();
 </script>
+
 </body></html>
